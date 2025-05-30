@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.Design;
 using ChessGame.Draws;
 using ChessGame.Pieces;
 
@@ -11,9 +6,70 @@ namespace ChessGame
 {
     public class Game
     {
+        int MoveNumbr;
+        int LastMoveThereWasCapture;
+        int LastMoveWherePawnMoved;
+        bool WhitePlayerAskedForDraw;
+        bool BlackPlayerAskedForDraw;
+
+        string[] boardsMemory;
+
+        public bool IsWhitePlayerAskedForDraw()
+        {
+            return WhitePlayerAskedForDraw;
+        }
+
+        public bool IsBlackPlayerAskedForDraw()
+        {
+            return BlackPlayerAskedForDraw;
+        }
+
         Piece[,] board;
         public Game() {
+            boardsMemory = new string[100];
+            this.WhitePlayerAskedForDraw = false;
+            this.BlackPlayerAskedForDraw=false;
             InitalizeBoard();
+        }
+
+        string ConvertBoardToString(Piece[,] board)
+        {
+            string currBoardRepresentation ="";
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    currBoardRepresentation += board[i, j] == null ? "Emp" : board[i, j].ToString();
+                    currBoardRepresentation += (i == 7 && j == 7) ? "" : ",";
+                }
+            return currBoardRepresentation;
+        }
+        void IncreaseMemorySize()
+        {
+            string[] newMemory = new string[this.boardsMemory.Length + 100];
+            for (int i = 0; i < this.boardsMemory.Length; i++) {
+                newMemory[i] = this.boardsMemory[i];
+            }
+            this.boardsMemory = newMemory;
+        }
+
+        public string[] GetBoardMemory()
+        {
+            return this.boardsMemory;
+        }
+
+        public int GetMoveNum()
+        {
+            return this.MoveNumbr;
+        }
+
+        public int GetLastMoveThereWasCapture()
+        {
+            return this.LastMoveThereWasCapture;
+        }
+
+        public int GetLastMoveWherePawnmoved()
+        {
+            return this.LastMoveWherePawnMoved;
         }
 
         public bool PlayMove(string move, string player)
@@ -96,11 +152,11 @@ namespace ChessGame
             Console.WriteLine();
 
         }
-
+        
         public void startGame()
         {
-            bool debugMode = true;
-            string[] InputForDebug = "A2A4;G8H6;A4A5;H6F5;A5A6;F5H4;A1A5;H4F3;A5H5;B2B4;G1F3;E7E5;F3E5;E8E7;E5D3;D7D5;A5D5;H7H5;D5E5;C8E6;H2H4;B7B6;B2B3;C7C5;B3B4;E7E8;B4B5;D8D3;B5C6;F8A3;C6C7;A3C1;G2G4;D1C1;F7F6;G4G5;F6F5;F1H3;D3D2;E1G1;D2E1;C7C8;E8E7;G1G2;E1F2;F1F2;G7G6;G2G3;G2G3;H8C8;E5E6;E7F7;D1D7;F7F8;E6F6;F8G8;F6G6;G8H8;G6H6;H8G8;D7D8;G8F7".Split(';');
+            bool debugMode = false ;
+            string[] InputForDebug = "E2E3;A7A5;D1H5;A8A6;H5A5;H7H5;A5C7;A6H6;H2H4;F7F6;C7D7;E8F7;D7B7;D8D3;B7B8;D3H7;B8C8;F7G6".Split(';');
             int indexForDebug = 0;
 
 
@@ -121,51 +177,79 @@ namespace ChessGame
                 }
                 if (!gameForfited)
                 {
+                    Piece[,] PrevBoard = MakenewCopyOfBoard(board);
                     do
                     {
                         validGameMove = true;
                         if (!debugMode || indexForDebug >= InputForDebug.Length)
+                        {
                             userInput = getUserInput(whiteTurn);
+                            if (userInput == "DRAW")
+                            {
+                                if (whiteTurn) 
+                                    this.WhitePlayerAskedForDraw = true;
+                                else this.BlackPlayerAskedForDraw = true;
+                                
+                            }
+                        }
+                        
                         else {
                             Console.WriteLine((whiteTurn ? "White " : "Black ") + "Turn , enter your move : ");
                             Console.WriteLine(InputForDebug[indexForDebug]);
                             userInput = InputForDebug[indexForDebug++];
                         }
-                       
-                            Piece[,] PrevBoard = MakenewCopyOfBoard(board);
-                        //need to check if the king is in check right now. if so,we have to play the next move to protect him. either by blocking or capturing.That mean we need to check if there
-                        //a possible to do so . If not the game is in checkmate. if so , we pass check boolean var after move function and check if the new situation is still check
-                        KingPlace = getKingPlace(whiteTurn ? "white" : "black");
-                        KingInCheck = IsPieceInCaptureDanger( whiteTurn ? "white" : "black",KingPlace[0], KingPlace[1],this.board);
-                        validPieceMove = PlayMove(userInput, whiteTurn ? "white" : "black");
-                        if (!validPieceMove)
-                            Console.WriteLine("invalid move. pleaes try again");
-                        else
+                        if(!this.WhitePlayerAskedForDraw && !this.BlackPlayerAskedForDraw)
                         {
-                            if (KingInCheck) // king was in check before the player move 
-                            {
-                                KingPlace = getKingPlace(whiteTurn ? "white" : "black");
-                                KingInCheck = IsPieceInCaptureDanger( whiteTurn ? "white" : "black", KingPlace[0], KingPlace[1], this.board);
-                                if (isKingCanBeSaved(whiteTurn ? "white" : "black") && KingInCheck) //if the king is still in check and can be saved
-                                {
-                                    validGameMove = false;
-                                    Console.WriteLine("invalid move.You can save your king and you have to do that. pleaes try again");
-                                    board = PrevBoard;
-                                }
-                            }
+                            this.WhitePlayerAskedForDraw = false;
+                            this.BlackPlayerAskedForDraw = false;
+                            //need to check if the king is in check right now. if so,we have to play the next move to protect him. either by blocking or capturing.That mean we need to check if there
+                            //a possible to do so . If not the game is in checkmate. if so , we pass check boolean var after move function and check if the new situation is still check
+                            KingPlace = getKingPlace(whiteTurn ? "white" : "black");
+                            KingInCheck = IsPieceInCaptureDanger(whiteTurn ? "white" : "black", KingPlace[0], KingPlace[1], this.board);
+                            validPieceMove = PlayMove(userInput, whiteTurn ? "white" : "black");
+                            if (!validPieceMove)
+                                Console.WriteLine("invalid move. pleaes try again");
                             else
                             {
-                                KingPlace = getKingPlace(whiteTurn ? "white" : "black");
-                                KingInCheck = IsPieceInCaptureDanger( whiteTurn ? "white" : "black", KingPlace[0], KingPlace[1], this.board); //king is in check and wasnt in check before the player move
-                                if (KingInCheck)
+                                if (KingInCheck) // king was in check before the player move 
                                 {
-                                    validGameMove = false;
-                                    Console.WriteLine("invalid move.You expose your kings to check. pleaes try again");
-                                    board = PrevBoard;
+                                    KingPlace = getKingPlace(whiteTurn ? "white" : "black");
+                                    KingInCheck = IsPieceInCaptureDanger(whiteTurn ? "white" : "black", KingPlace[0], KingPlace[1], this.board);
+                                    if (isKingCanBeSaved(whiteTurn ? "white" : "black") && KingInCheck) //if the king is still in check and can be saved
+                                    {
+                                        validGameMove = false;
+                                        Console.WriteLine("invalid move.You can save your king and you have to do that. pleaes try again");
+                                        board = PrevBoard;
+                                    }
+                                }
+                                else
+                                {
+                                    KingPlace = getKingPlace(whiteTurn ? "white" : "black");
+                                    KingInCheck = IsPieceInCaptureDanger(whiteTurn ? "white" : "black", KingPlace[0], KingPlace[1], this.board); //king is in check and wasnt in check before the player move
+                                    if (KingInCheck)
+                                    {
+                                        validGameMove = false;
+                                        Console.WriteLine("invalid move.You expose your kings to check. pleaes try again");
+                                        board = PrevBoard;
+                                    }
                                 }
                             }
                         }
                     } while ((!validPieceMove || !validGameMove));
+
+                    //check if there was capturing or pawn movement
+                    int column_source = 7 - (72 % ((char)userInput[0]));
+                    int column_dest = 7 - (72 % ((char)userInput[2]));
+                    int row_source = 7 - (int.Parse(userInput[1].ToString()) - 1);
+                    int row_dest = 7 - (int.Parse(userInput[3].ToString()) - 1);
+                    if (PrevBoard[row_source, row_dest] is Pawn) this.LastMoveWherePawnMoved = this.MoveNumbr;
+                    if (PrevBoard[row_dest, column_dest] != null && PrevBoard[row_dest, column_dest].getColor() != (whiteTurn ? "white" : "black")) this.LastMoveThereWasCapture = this.MoveNumbr;
+
+                    //save board in memory
+                    if (this.boardsMemory[this.boardsMemory.Length - 1] != null) this.IncreaseMemorySize();
+                    this.boardsMemory[MoveNumbr] = this.ConvertBoardToString(board);
+
+                    this.MoveNumbr++;
                     whiteTurn = !whiteTurn;
                     PrintBoard();
                     //check win or draw
@@ -203,6 +287,7 @@ namespace ChessGame
             for (int i = KingRow + 1; i < 8; i++) //check for Rooks/Queens threats in the same column down
             {
                 if (board[i, KingColumn] is Piece && board[i, KingColumn].getColor() == player) break;
+                if (board[i, KingColumn] is Piece && board[i, KingColumn].getColor() != player && (!(board[i, KingColumn] is Queen || board[i, KingColumn] is Rook))) break;
                 if (board[i, KingColumn] is Queen || board[i, KingColumn] is Rook)
                 {
                     //if king can move to other tile
@@ -224,9 +309,10 @@ namespace ChessGame
                     return false;
                 }
             }
-            for (int i = KingRow - 1; i > 0; i--) //check for Rooks/Queens threats in the same column up
+            for (int i = KingRow - 1; i >= 0; i--) //check for Rooks/Queens threats in the same column up
             {
                 if (board[i, KingColumn] is Piece && board[i, KingColumn].getColor() == player) break;
+                if (board[i, KingColumn] is Piece && board[i, KingColumn].getColor() != player && (!(board[i, KingColumn] is Queen || board[i, KingColumn] is Rook))) break;
                 if (board[i, KingColumn] is Queen || board[i, KingColumn] is Rook)
                 {
                     //if king can move to other tile
@@ -248,9 +334,10 @@ namespace ChessGame
                     return false;
                 }
             }
-            for (int i = KingColumn + 1; i < 7; i++) //check for Rooks/Queens threats in the same row right
+            for (int i = KingColumn + 1; i < 8; i++) //check for Rooks/Queens threats in the same row right
             {
                 if (board[KingRow, i] is Piece && board[KingRow, i].getColor() == player) break;
+                if (board[KingRow, i] is Piece && board[KingRow, i].getColor() != player && (!(board[KingRow, i] is Queen || board[KingRow, i] is Rook))) break;
                 if (board[KingRow, i] is Queen || board[KingRow, i] is Rook)
                 {
                     //if king can move to other tile
@@ -272,9 +359,10 @@ namespace ChessGame
                     return false;
                 }
             }
-            for (int i = KingColumn - 1; i > 0; i--) //check for Rooks/Queens threats in the same row left
+            for (int i = KingColumn - 1; i >= 0; i--) //check for Rooks/Queens threats in the same row left
             {
                 if (board[KingRow, i] is Piece && board[KingRow, i].getColor() == player) break;
+                if (board[KingRow, i] is Piece && board[KingRow, i].getColor() != player && (!(board[KingRow, i] is Queen || board[KingRow, i] is Rook))) break;
                 if (board[KingRow, i] is Queen || board[KingRow, i] is Rook)
                 {
                     //if king can move to other tile
@@ -302,6 +390,7 @@ namespace ChessGame
             for (int i = KingRow + 1, j = KingColumn + 1; i < 8 && j < 8; i++, j++) //check for Queens/Bishops threats diagonly right down
             {
                 if (board[i, j] is Piece && board[i, j].getColor() == player) break;
+                if (board[i, j] is Piece && board[i, j].getColor() == player && (!(board[i, j] is Queen || board[i, j] is Bishop))) break;
                 if (board[i, j] is Queen || board[i, j] is Bishop)
                 {
                     //if king can move to other tile
@@ -323,9 +412,10 @@ namespace ChessGame
                     return false;
                 }
             }
-            for (int i = KingRow + 1, j = KingColumn - 1; i < 8 && j > 0; i++, j--) //check for Bishops threats diagonly left down
+            for (int i = KingRow + 1, j = KingColumn - 1; i < 8 && j >= 0; i++, j--) //check for Bishops threats diagonly left down
             {
                 if (board[i, j] is Piece && board[i, j].getColor() == player) break;
+                if (board[i, j] is Piece && board[i, j].getColor() == player && (!(board[i, j] is Queen || board[i, j] is Bishop))) break;
                 if (board[i, j] is Queen || board[i, j] is Bishop)
                 {
                     //if king can move to other tile
@@ -347,9 +437,10 @@ namespace ChessGame
                     return false;
                 }
             }
-            for (int i = KingRow - 1, j = KingColumn + 1; i > 0 && j < 8; i--, j++) //check for Bishops threats diagonly right up
+            for (int i = KingRow - 1, j = KingColumn + 1; i >= 0 && j < 8; i--, j++) //check for Bishops threats diagonly right up
             {
                 if (board[i, j] is Piece && board[i, j].getColor() == player) break;
+                if (board[i, j] is Piece && board[i, j].getColor() == player && (!(board[i, j] is Queen || board[i, j] is Bishop))) break;
                 if (board[i, j] is Queen || board[i, j] is Bishop)
                 {
                     //if king can move to other tile
@@ -371,9 +462,10 @@ namespace ChessGame
                     return false;
                 }
             }
-            for (int i = KingRow - 1, j = KingColumn - 1; i > 0 && j > 0; i--, j--) //check for Bishops threats diagonly left up
+            for (int i = KingRow - 1, j = KingColumn - 1; i >= 0 && j > 0; i--, j--) //check for Bishops threats diagonly left up
             {
                 if (board[i, j] is Piece && board[i, j].getColor() == player) break;
+                if (board[i, j] is Piece && board[i, j].getColor() == player && (!(board[i, j] is Queen || board[i, j] is Bishop))) break;
                 if (board[i, j] is Queen || board[i, j] is Bishop)
                 {
                     //if king can move to other tile
@@ -397,58 +489,58 @@ namespace ChessGame
             }
 
             //Pawns threats
-            if (player == "black")
-            {
-                if (KingRow != 7 && KingColumn != 0 && board[KingRow + 1, KingColumn - 1] is Pawn && board[KingRow + 1, KingColumn - 1].getColor() != player)
-                {
-                    if ((KingRow != 7 && board[KingRow + 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn, this.board)) || //down
-           (KingColumn != 7 && KingRow != 7 && board[KingRow + 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn + 1, this.board)) || //down right
-           (KingColumn != 0 && board[KingRow, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn - 1, this.board)) //left
-           || (KingRow != 0 && board[KingRow - 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn, this.board)) || //up
-           (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
-           (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board)) //right
-                        && !IsPieceInCaptureDanger(opponent, KingRow + 1, KingColumn - 1, this.board)) return false;
+        //    if (player == "black")
+        //    {
+        //        if (KingRow != 7 && KingColumn != 0 && board[KingRow + 1, KingColumn - 1] is Pawn && board[KingRow + 1, KingColumn - 1].getColor() != player)
+        //        {
+        //            if ((KingRow != 7 && board[KingRow + 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn, this.board)) || //down
+        //   (KingColumn != 7 && KingRow != 7 && board[KingRow + 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn + 1, this.board)) || //down right
+        //   (KingColumn != 0 && board[KingRow, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn - 1, this.board)) //left
+        //   || (KingRow != 0 && board[KingRow - 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn, this.board)) || //up
+        //   (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
+        //   (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board)) //right
+        //                && !IsPieceInCaptureDanger(opponent, KingRow + 1, KingColumn - 1, this.board)) return true;
 
-                }
-                if (KingRow != 7 && KingColumn != 7 && board[KingRow + 1, KingColumn + 1] is Pawn && board[KingRow + 1, KingColumn + 1].getColor() != player)
-                {
-                    if ((KingRow != 7 && board[KingRow + 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn, this.board)) || //down
-        (KingColumn != 0 && KingRow != 7 && board[KingRow + 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn - 1, this.board)) || //down left
-        (KingColumn != 0 && board[KingRow, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn - 1, this.board)) //left
-        || (KingRow != 0 && board[KingRow - 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn, this.board)) || //up
-        (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
-        (KingColumn != 7 && board[KingRow, KingColumn + 1] == null) && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board) //right
-                     && IsPieceInCaptureDanger(opponent, KingRow + 1, KingColumn + 1, this.board)) return false;
-                }
-            }
-            else
-            {
-                if (KingRow != 0 && KingColumn != 0 && board[KingRow - 1, KingColumn - 1] is Pawn && board[KingRow - 1, KingColumn - 1].getColor() != player)
-                {
-                    //if king can move to other tile
-                    if ((KingRow != 7 && board[KingRow + 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn, this.board)) || //down
-                         (KingColumn != 7 && KingRow != 7 && board[KingRow + 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn + 1, this.board)) || //down right
-                         (KingColumn != 0 && board[KingRow, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn - 1, this.board)) //left
-                         || (KingRow != 0 && board[KingRow - 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn, this.board)) || //up
-                         (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
-                         (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board)) //right
-                       && !(IsPieceInCaptureDanger(opponent, KingRow - 1, KingColumn -1, this.board))) return false ;
+        //        }
+        //        if (KingRow != 7 && KingColumn != 7 && board[KingRow + 1, KingColumn + 1] is Pawn && board[KingRow + 1, KingColumn + 1].getColor() != player)
+        //        {
+        //            if ((KingRow != 7 && board[KingRow + 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn, this.board)) || //down
+        //(KingColumn != 0 && KingRow != 7 && board[KingRow + 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn - 1, this.board)) || //down left
+        //(KingColumn != 0 && board[KingRow, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn - 1, this.board)) //left
+        //|| (KingRow != 0 && board[KingRow - 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn, this.board)) || //up
+        //(KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
+        //(KingColumn != 7 && board[KingRow, KingColumn + 1] == null) && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board) //right
+        //             && IsPieceInCaptureDanger(opponent, KingRow + 1, KingColumn + 1, this.board)) return true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (KingRow != 0 && KingColumn != 0 && board[KingRow - 1, KingColumn - 1] is Pawn && board[KingRow - 1, KingColumn - 1].getColor() != player)
+        //        {
+        //            //if king can move to other tile
+        //            if ((KingRow != 7 && board[KingRow + 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn, this.board)) || //down
+        //                 (KingColumn != 7 && KingRow != 7 && board[KingRow + 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn + 1, this.board)) || //down right
+        //                 (KingColumn != 0 && board[KingRow, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn - 1, this.board)) //left
+        //                 || (KingRow != 0 && board[KingRow - 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn, this.board)) || //up
+        //                 (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
+        //                 (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board)) //right
+        //               && !(IsPieceInCaptureDanger(opponent, KingRow - 1, KingColumn -1, this.board))) return true;
 
 
-                }
-                if (KingRow != 0 && KingColumn != 7 && board[KingRow - 1, KingColumn + 1] is Pawn && board[KingRow - 1, KingColumn + 1].getColor() != player)
-                {
-                    //if king can move to other tile
-                    if ((KingRow != 7 && board[KingRow + 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn, this.board)) || //down
-                          (KingColumn != 0 && KingRow != 7 && board[KingRow + 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn - 1, this.board)) || //down left
-                          (KingColumn != 0 && board[KingRow, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn - 1, this.board)) //left
-                          || (KingRow != 0 && board[KingRow - 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn, this.board)) || //up
-                          (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
-                          (KingColumn != 7 && board[KingRow, KingColumn + 1] == null) && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board) //right
-                        && !(IsPieceInCaptureDanger(opponent, KingRow - 1, KingColumn + 1, this.board))) return false;
+        //        }
+        //        if (KingRow != 0 && KingColumn != 7 && board[KingRow - 1, KingColumn + 1] is Pawn && board[KingRow - 1, KingColumn + 1].getColor() != player)
+        //        {
+        //            //if king can move to other tile
+        //            if ((KingRow != 7 && board[KingRow + 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn, this.board)) || //down
+        //                  (KingColumn != 0 && KingRow != 7 && board[KingRow + 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn - 1, this.board)) || //down left
+        //                  (KingColumn != 0 && board[KingRow, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn - 1, this.board)) //left
+        //                  || (KingRow != 0 && board[KingRow - 1, KingColumn] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn, this.board)) || //up
+        //                  (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
+        //                  (KingColumn != 7 && board[KingRow, KingColumn + 1] == null) && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board) //right
+        //                && !(IsPieceInCaptureDanger(opponent, KingRow - 1, KingColumn + 1, this.board))) return true;
 
-                }
-            }
+        //        }
+        //    }
 
             //no need to check kings threats because king canot capture another king
 
@@ -464,7 +556,7 @@ namespace ChessGame
                        (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
                        (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
                        (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board))) //right 
-                    && !IsPieceInCaptureDanger(opponent, KingRow - 2, KingColumn + 1, this.board)) return false ;  //if the knight can be captured
+                    && !IsPieceInCaptureDanger(opponent, KingRow - 2, KingColumn + 1, this.board)) return true;  //if the knight can be captured
             }
             if ((KingRow >= 2 && KingColumn > 0) && board[KingRow- 2, KingColumn- 1] is Knight && (board[KingRow- 2, KingColumn- 1].getColor() != player))
             {
@@ -477,7 +569,7 @@ namespace ChessGame
                        (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
                        (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
                        (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board))) //right 
-                    && !IsPieceInCaptureDanger(opponent, KingRow - 2, KingColumn - 1, this.board)) return false;  //if the knight can be captured
+                    && !IsPieceInCaptureDanger(opponent, KingRow - 2, KingColumn - 1, this.board)) return true;  //if the knight can be captured
             }
             if ((KingRow >= 1 && KingColumn < 6) && board[KingRow - 1, KingColumn + 2] is Knight && (board[KingRow - 1, KingColumn + 2].getColor() != player))
             {
@@ -490,7 +582,7 @@ namespace ChessGame
                        (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
                        (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
                        (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board))) //right 
-                    && !IsPieceInCaptureDanger(opponent, KingRow - 1, KingColumn + 2, this.board)) return false;  //if the knight can be captured
+                    && !IsPieceInCaptureDanger(opponent, KingRow - 1, KingColumn + 2, this.board)) return true;  //if the knight can be captured
             }
             if ((KingRow >= 1 && KingColumn > 1) && board[KingRow - 1, KingColumn - 2] is Knight && (board[KingRow - 1, KingColumn - 2].getColor() != player))
             {
@@ -503,7 +595,7 @@ namespace ChessGame
                        (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
                        (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
                        (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board))) //right 
-                    && !IsPieceInCaptureDanger(opponent, KingRow - 1, KingColumn - 2, this.board)) return false;  //if the knight can be captured
+                    && !IsPieceInCaptureDanger(opponent, KingRow - 1, KingColumn - 2, this.board)) return true;  //if the knight can be captured
             }
             if ((KingRow < 7 && KingColumn < 6) && board[KingRow + 1, KingColumn + 2] is Knight && (board[KingRow + 1, KingColumn + 2].getColor() != player))
             {
@@ -516,7 +608,7 @@ namespace ChessGame
                        (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
                        (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
                        (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board))) //right 
-                    && !IsPieceInCaptureDanger(opponent, KingRow + 1, KingColumn + 2, this.board)) return false;  //if the knight can be captured
+                    && !IsPieceInCaptureDanger(opponent, KingRow + 1, KingColumn + 2, this.board)) return true;  //if the knight can be captured
             }
             if ((KingRow < 7 && KingColumn > 1) && board[KingRow + 1, KingColumn - 2] is Knight && (board[KingRow + 1, KingColumn - 2].getColor() != player))
             {
@@ -529,7 +621,7 @@ namespace ChessGame
                        (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
                        (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
                        (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board))) //right 
-                    && !IsPieceInCaptureDanger(opponent, KingRow + 1, KingColumn - 2, this.board)) return false;  //if the knight can be captured
+                    && !IsPieceInCaptureDanger(opponent, KingRow + 1, KingColumn - 2, this.board)) return true;  //if the knight can be captured
             }
             if ((KingRow < 6 && KingColumn < 7) && board[KingRow + 2, KingColumn + 1] is Knight && (board[KingRow + 2, KingColumn + 1].getColor() != player))
             {
@@ -542,7 +634,7 @@ namespace ChessGame
                        (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
                        (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
                        (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board))) //right 
-                    && !IsPieceInCaptureDanger(opponent, KingRow + 2, KingColumn + 1, this.board)) return false;  //if the knight can be captured
+                    && !IsPieceInCaptureDanger(opponent, KingRow + 2, KingColumn + 1, this.board)) return true;  //if the knight can be captured
             }
             if ((KingRow < 6 && KingColumn > 0) && board[KingRow + 2, KingColumn - 1] is Knight && (board[KingRow + 2, KingColumn - 1].getColor() != player))
             {
@@ -555,7 +647,7 @@ namespace ChessGame
                        (KingColumn != 0 && KingRow != 0 && board[KingRow - 1, KingColumn - 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
                        (KingColumn != 7 && KingRow != 0 && board[KingRow - 1, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
                        (KingColumn != 7 && board[KingRow, KingColumn + 1] == null && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board))) //right 
-                    && !IsPieceInCaptureDanger(opponent, KingRow + 2, KingColumn - 1, this.board)) return false;  //if the knight can be captured
+                    && !IsPieceInCaptureDanger(opponent, KingRow + 2, KingColumn - 1, this.board)) return true;  //if the knight can be captured
             }
 
             return true;
@@ -576,46 +668,54 @@ namespace ChessGame
             {
                 if (board[i, PieceColumn] is Piece && board[i, PieceColumn].getColor() == player ) break;
                 if (board[i, PieceColumn] is Queen || board[i, PieceColumn] is Rook ) return true;
+                if (board[i, PieceColumn] != null) break;
             }
-            for (int i = PieceRow - 1; i > 0; i--) //check for Rooks/Queens threats in the same column up
+            for (int i = PieceRow - 1; i >= 0; i--) //check for Rooks/Queens threats in the same column up
             {
                 if (board[i, PieceColumn] is Piece && board[i, PieceColumn].getColor() == player ) break;
                 if (board[i, PieceColumn] is Queen || board[i, PieceColumn] is Rook ) return true;
+                if (board[i, PieceColumn] != null) break;
             }
             for (int i = PieceColumn + 1; i < 8; i++) //check for Rooks/Queens threats in the same row to the right
             {
                 if (board[PieceRow, i] is Piece && board[PieceRow, i].getColor() == player) break;
                 if (board[PieceRow, i] is Queen || board[PieceRow, i] is Rook ) return true;
+                if (board[PieceRow,i] != null) break;
             }
 
-            for (int i = PieceColumn - 1; i > 0; i--) //check for Rooks/Queens threats in the same row to the left
+            for (int i = PieceColumn - 1; i >= 0; i--) //check for Rooks/Queens threats in the same row to the left
             {
                 if (board[PieceRow, i] is Piece && board[PieceRow, i].getColor() == player) break;
                 if (board[PieceRow, i] is Queen || board[PieceRow, i] is Rook ) return true;
+                if (board[PieceRow, i] != null) break;
             }
 
             for (int i = PieceRow + 1 , j =PieceColumn + 1; i < 8 && j < 8; i++,j++) //check for Queens/Bishops threats diagonly right down
             {
                 if (board[i, j] is Piece && board[i, j].getColor() == player ) break;
                 if (board[i, j] is Queen || board[i, j] is Bishop ) return true;
+                if (board[i, j] != null) break;
             }
 
             for (int i = PieceRow + 1, j = PieceColumn - 1; i < 8 && j > 0; i++, j--) //check for Bishops threats diagonly left down
             {
                 if (board[i, j] is Piece && board[i, j].getColor() == player ) break;
                 if (board[i, j] is Queen || board[i, j] is Bishop ) return true;
+                if (board[i, j] != null) break;
             }
 
-            for (int i = PieceRow-1 , j = PieceColumn + 1; i >0  && j < 8; i--, j++) //check for Bishops threats diagonly right up
+            for (int i = PieceRow-1 , j = PieceColumn + 1; i >= 0  && j < 8; i--, j++) //check for Bishops threats diagonly right up
             {
                 if (board[i, j] is Piece && board[i, j].getColor() == player ) break;
                 if (board[i, j] is Queen || board[i, j] is Bishop  ) return true;
+                if (board[i, j] != null) break;
             }
 
-            for (int i = PieceRow - 1, j = PieceColumn - 1; i > 0 && j > 0; i--, j--) //check for Bishops threats diagonly left up
+            for (int i = PieceRow - 1, j = PieceColumn - 1; i >= 0 && j > 0; i--, j--) //check for Bishops threats diagonly left up
             {
                 if (board[i, j] is Piece && board[i, j].getColor() == player ) break;
                 if (board[i, j] is Queen || board[i, j] is Bishop  ) return true;
+                if (board[i, j] != null) break;
             }
 
             //Pawns threats
@@ -674,7 +774,7 @@ namespace ChessGame
             draws[3] = new DeadPositionDraw();
             draws[4] = new FifhtyMoveRuleDraw();
             foreach (var draw in draws)
-                if (draw.IsDraw(this.board, player, this))
+                if (draw.IsDraw(this.board, this))
                     return true;
             return false;
         }
@@ -685,8 +785,9 @@ namespace ChessGame
             string input = "";
             while (!validInput)
             {
-                Console.WriteLine((Whiteturn ? "White " : "Black ") + "Turn , enter your move : ");
+                Console.WriteLine((Whiteturn ? "White " : "Black ") + "Turn , enter your move , Or Ask for a draw (Type DRAW)");
                 input = Console.ReadLine();
+                if (input == "DRAW") return "DRAW";
                 if (input.Length == 4 && ((int)input[0] >= 65 && (int)input[0] <= 72) && (int.Parse(input[1].ToString()) <= 8 && int.Parse(input[1].ToString()) >= 1) &&
                     ((int)input[2] >= 65 && (int)input[2] <= 72) && (int.Parse(input[3].ToString()) <= 8 && int.Parse(input[3].ToString()) >= 1))
                     validInput = true;

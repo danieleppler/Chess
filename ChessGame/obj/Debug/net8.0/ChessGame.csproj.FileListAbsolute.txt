@@ -12,3 +12,4 @@ C:\Users\daniele\source\repos\ChessGame\ChessGame\obj\Debug\net8.0\refint\ChessG
 C:\Users\daniele\source\repos\ChessGame\ChessGame\obj\Debug\net8.0\ChessGame.pdb
 C:\Users\daniele\source\repos\ChessGame\ChessGame\obj\Debug\net8.0\ChessGame.genruntimeconfig.cache
 C:\Users\daniele\source\repos\ChessGame\ChessGame\obj\Debug\net8.0\ref\ChessGame.dll
+C:\Users\daniele\source\repos\ChessGame\ChessGame\obj\Debug\net8.0\ChessGame.sourcelink.json

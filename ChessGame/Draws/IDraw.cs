@@ -8,6 +8,6 @@ namespace ChessGame.Draws
 {
     public interface IDraw
     {
-        bool IsDraw(Piece[,] board,string playerTurn,Game currGame);
+        bool IsDraw(Piece[,] board,Game currGame);
     }
 }
