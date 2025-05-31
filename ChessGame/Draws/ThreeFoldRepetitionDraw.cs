@@ -18,8 +18,12 @@ namespace ChessGame.Draws
                 {
                     if (boardsMemory[j] == boardsMemory[i])
                         BoardCount++;
-                    if(BoardCount == 3) 
+                    if(BoardCount == 3)
+                    {
+                        Console.Write("Three fold repetition - ");
                         return true;
+                    }
+                        
                 }
             }
             return false;

@@ -21,22 +21,22 @@ namespace ChessGame.Pieces
             bool validMove = false;
 
             //up
-            if (destRow == currPawnRow - 1)
+            if (destRow == currPawnRow - 1 && ((currPawnColumn == destColumn - 1) || (currPawnColumn == destColumn + 1) || (currPawnColumn == destColumn)))
                 validMove = true;
             //down
-            if (destRow == currPawnRow + 1)
+            if (destRow == currPawnRow + 1 && ((currPawnColumn == destColumn - 1) || (currPawnColumn == destColumn + 1) || (currPawnColumn == destColumn)))
                 validMove = true;
             //left
-            if (destColumn == currPawnColumn - 1)
+            if (destColumn == currPawnColumn - 1 && ((currPawnRow == destRow - 1) || (currPawnRow == destRow + 1) || (currPawnRow == destRow)))
                 validMove = true;
             //right
-            if (destColumn == currPawnColumn + 1)
+            if (destColumn == currPawnColumn + 1 && ((currPawnRow == destRow - 1) || (currPawnRow == destRow + 1) || (currPawnRow == destRow)))
                 validMove = true;
 
             bool castling = false;
             int CastlingRow = player == "white" ? 7 : 0;
             //castling
-            if (this.MoveNumber == 0 && (destColumn == currPawnColumn + 2) || (destColumn == currPawnColumn -2) && !validMove)
+            if (this.MoveNumber == 0 && ((destColumn == currPawnColumn + 2) || (destColumn == currPawnColumn -2)) && !validMove && currPawnRow == destRow)
             {
                
                 if ((board[CastlingRow, 0] is Rook && ((Rook) board[CastlingRow, 0]).getFirstMove()) || (board[CastlingRow, 7] is Rook && ((Rook)board[CastlingRow, 7]).getFirstMove()))
@@ -70,12 +70,14 @@ namespace ChessGame.Pieces
             {
                 board[CastlingRow, 5] = board[CastlingRow, 7];
                 board[CastlingRow, 7] = null;
+                Console.WriteLine("player used castling");
             }
 
             if(castling && destColumn < currPawnColumn)
             {
                 board[CastlingRow, 3] = board[CastlingRow, 7];
                 board[CastlingRow, 0] = null;
+                Console.WriteLine("player used castling");
             }
 
             board[destRow, destColumn] = board[currPawnRow, currPawnColumn];

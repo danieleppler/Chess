@@ -13,7 +13,11 @@ namespace ChessGame.Draws
         {
             if(currGame.GetLastMoveThereWasCapture() < currGame.GetMoveNum() - 50 &&
                 currGame.GetLastMoveWherePawnmoved() < currGame.GetMoveNum() - 50)
+            {
+                Console.Write("Fifthy move rule - ");
                 return true;
+            }
+                
             return false;
         }
     }

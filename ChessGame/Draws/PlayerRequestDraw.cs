@@ -11,7 +11,10 @@ namespace ChessGame.Draws
         public bool IsDraw(Piece[,] board, Game currGame)
         {
             if(currGame.IsWhitePlayerAskedForDraw() && currGame.IsBlackPlayerAskedForDraw())
+            {
+                Console.Write("Both players agreed - ");
                 return true;
+            }
             return false;
         }
     }

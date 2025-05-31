@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ChessGame.Pieces;
+﻿using ChessGame.Pieces;
 
 namespace ChessGame.Draws
 {
@@ -47,7 +42,11 @@ namespace ChessGame.Draws
             }
              
             if (KingVsKingAndBishop || kingVsKing)
+            {
+                Console.Write("Dead position - ");
                 return true;
+            }
+                
 
             return false;
         }

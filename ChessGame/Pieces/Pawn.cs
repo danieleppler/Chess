@@ -57,7 +57,11 @@
 
                 if (CaptureChance || MoveWithoutCaptureNotFirstMove || MoveWithoutCapureFirstMove || enPassant)
             {
-                                
+
+                if (enPassant)
+                    Console.WriteLine("playser used en passant");
+
+
                 board[destRow, destColumn] = board[currPawnRow, currPawnColumn];
                 board[currPawnRow, currPawnColumn] = null;
 

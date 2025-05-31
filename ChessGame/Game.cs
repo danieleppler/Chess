@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.Design;
+using System.Runtime.CompilerServices;
 using ChessGame.Draws;
 using ChessGame.Pieces;
 
@@ -74,6 +75,7 @@ namespace ChessGame
 
         public bool PlayMove(string move, string player)
         {
+            //convert verified string input to board indexes
             int column_source = 7 - (72 % ((char)move[0]));
             int column_dest = 7 - (72 % ((char)move[2]));
             int row_source = 7 - (int.Parse(move[1].ToString()) - 1);
@@ -155,53 +157,55 @@ namespace ChessGame
         
         public void startGame()
         {
-            bool debugMode = false ;
-            string[] InputForDebug = "E2E3;A7A5;D1H5;A8A6;H5A5;H7H5;A5C7;A6H6;H2H4;F7F6;C7D7;E8F7;D7B7;D8D3;B7B8;D3H7;B8C8;F7G6".Split(';');
+            //for debug purposes
+            bool debugMode = false;
+            string[] InputForDebug = "E2E4;D7D5;E4D5;D8D5;F1D3;D5A2;D3H7;A2B1;H7G8;B1C2;G8F7;E8F7;A1A7;C2C1;A7B7;H8H2;B7B8;H2G2;D1C1".ToUpper().Split(';');
             int indexForDebug = 0;
-
 
             bool gameForfited = false;
             string userInput;
             bool whiteTurn = true;
-            bool validPieceMove = false;
-            bool validGameMove ;
+            bool validPieceMove = true;
+            bool validGameMove = true;
             bool KingInCheck = false;
             int[] KingPlace;
+
             PrintBoard();
+
             while (!gameForfited)
             {
+                //check if the player previously played had won the game
                 if (checkForWin(whiteTurn ? "black" : "white"))
                 {
                     Console.WriteLine((whiteTurn ? "black " : "white ") + "player won!");
                     gameForfited = true;
                 }
-                if (!gameForfited)
+                if (!gameForfited) //if the player previously played hasnt won the game
                 {
+                    //we make a copy of the board - so if the player move is not valid we can return to the original state
                     Piece[,] PrevBoard = MakenewCopyOfBoard(board);
                     do
                     {
                         validGameMove = true;
                         if (!debugMode || indexForDebug >= InputForDebug.Length)
-                        {
-                            userInput = getUserInput(whiteTurn);
-                            if (userInput == "DRAW")
-                            {
-                                if (whiteTurn) 
-                                    this.WhitePlayerAskedForDraw = true;
-                                else this.BlackPlayerAskedForDraw = true;
-                                
-                            }
-                        }
-                        
+                        {   
+                                userInput = getUserInput(whiteTurn);
+                                if (userInput == "DRAW")
+                                {
+                                    if (whiteTurn)
+                                        this.WhitePlayerAskedForDraw = true;
+                                    else this.BlackPlayerAskedForDraw = true;
+
+                                }
+                            
+                        }      
                         else {
-                            Console.WriteLine((whiteTurn ? "White " : "Black ") + "Turn , enter your move : ");
                             Console.WriteLine(InputForDebug[indexForDebug]);
                             userInput = InputForDebug[indexForDebug++];
                         }
+                        //if no player asked for draw play the player move
                         if(!this.WhitePlayerAskedForDraw && !this.BlackPlayerAskedForDraw)
                         {
-                            this.WhitePlayerAskedForDraw = false;
-                            this.BlackPlayerAskedForDraw = false;
                             //need to check if the king is in check right now. if so,we have to play the next move to protect him. either by blocking or capturing.That mean we need to check if there
                             //a possible to do so . If not the game is in checkmate. if so , we pass check boolean var after move function and check if the new situation is still check
                             KingPlace = getKingPlace(whiteTurn ? "white" : "black");
@@ -219,7 +223,7 @@ namespace ChessGame
                                     {
                                         validGameMove = false;
                                         Console.WriteLine("invalid move.You can save your king and you have to do that. pleaes try again");
-                                        board = PrevBoard;
+                                        board = MakenewCopyOfBoard(PrevBoard);
                                     }
                                 }
                                 else
@@ -230,34 +234,66 @@ namespace ChessGame
                                     {
                                         validGameMove = false;
                                         Console.WriteLine("invalid move.You expose your kings to check. pleaes try again");
-                                        board = PrevBoard;
+                                        board = MakenewCopyOfBoard(PrevBoard);
                                     }
                                 }
                             }
                         }
+
                     } while ((!validPieceMove || !validGameMove));
 
-                    //check if there was capturing or pawn movement
-                    int column_source = 7 - (72 % ((char)userInput[0]));
-                    int column_dest = 7 - (72 % ((char)userInput[2]));
-                    int row_source = 7 - (int.Parse(userInput[1].ToString()) - 1);
-                    int row_dest = 7 - (int.Parse(userInput[3].ToString()) - 1);
-                    if (PrevBoard[row_source, row_dest] is Pawn) this.LastMoveWherePawnMoved = this.MoveNumbr;
-                    if (PrevBoard[row_dest, column_dest] != null && PrevBoard[row_dest, column_dest].getColor() != (whiteTurn ? "white" : "black")) this.LastMoveThereWasCapture = this.MoveNumbr;
+                    //of no player asked for draw check this stats on the board
+                    if (!this.BlackPlayerAskedForDraw && !this.WhitePlayerAskedForDraw)
+                    {
+                        //check if there was capturing or pawn movement
+                        int column_source = 7 - (72 % ((char)userInput[0]));
+                        int column_dest = 7 - (72 % ((char)userInput[2]));
+                        int row_source = 7 - (int.Parse(userInput[1].ToString()) - 1);
+                        int row_dest = 7 - (int.Parse(userInput[3].ToString()) - 1);
+                        if (PrevBoard[row_source, row_dest] is Pawn) this.LastMoveWherePawnMoved = this.MoveNumbr;
+                        if (PrevBoard[row_dest, column_dest] != null && PrevBoard[row_dest, column_dest].getColor() != (whiteTurn ? "white" : "black")) this.LastMoveThereWasCapture = this.MoveNumbr;
 
-                    //save board in memory
-                    if (this.boardsMemory[this.boardsMemory.Length - 1] != null) this.IncreaseMemorySize();
-                    this.boardsMemory[MoveNumbr] = this.ConvertBoardToString(board);
+                        //save board in memory
+                        if (this.boardsMemory[this.boardsMemory.Length - 1] != null) this.IncreaseMemorySize();
+                        this.boardsMemory[MoveNumbr] = this.ConvertBoardToString(board);
+                        this.MoveNumbr++;
+                        PrintBoard();
+                    }
 
-                    this.MoveNumbr++;
-                    whiteTurn = !whiteTurn;
-                    PrintBoard();
+                    if (this.WhitePlayerAskedForDraw || this.BlackPlayerAskedForDraw)
+                    {
+                        bool validInput = false;
+                        do
+                        {
+                            Console.WriteLine("Opponent asked for draw. do you accept ? (Yes/No)");
+                            userInput = Console.ReadLine();
+                            if (userInput == "Yes")
+                            {
+                                this.WhitePlayerAskedForDraw = true;
+                                this.BlackPlayerAskedForDraw = true;
+                                validInput = true;
+                            }
+                            else if (userInput == "No")
+                            {
+                                this.WhitePlayerAskedForDraw = false;
+                                this.BlackPlayerAskedForDraw = false;
+                                validInput = true;
+                            }
+                            if (!validInput)
+                                Console.Write("invalid input.");
+                        } while (!validInput);
+                    }
+                    else
+                    {
+                        whiteTurn = !whiteTurn;
+                    }
                     //check win or draw
-                    if (checkForDraw(whiteTurn ? "white" :"black"))
+                    if (checkForDraw(whiteTurn ? "white" : "black"))
                     {
                         Console.WriteLine("Thats a Draw!");
                         gameForfited = true;
                     }
+ 
                 }
              }      
         }
@@ -655,6 +691,7 @@ namespace ChessGame
 
         public Piece[,] MakenewCopyOfBoard(Piece[,] board)
         {
+            //make copy of the board by values and not by reference 
             Piece[,] newBoard = new Piece[8, 8];
             for(int i = 0; i < 8; i++)
                 for(int j=0;j<8; j++)
@@ -761,6 +798,7 @@ namespace ChessGame
         {
             string opponent = player == "white" ? "black" : "white";
             int[] KingPlace = getKingPlace(opponent);
+            //if the opponent king is in check and the king canot be save - its a checkmate 
             if (IsPieceInCaptureDanger(opponent, KingPlace[0], KingPlace[1], this.board) && !isKingCanBeSaved(opponent)) return true;
             return false;
         }
@@ -786,7 +824,7 @@ namespace ChessGame
             while (!validInput)
             {
                 Console.WriteLine((Whiteturn ? "White " : "Black ") + "Turn , enter your move , Or Ask for a draw (Type DRAW)");
-                input = Console.ReadLine();
+                input = Console.ReadLine().Trim().ToUpper();
                 if (input == "DRAW") return "DRAW";
                 if (input.Length == 4 && ((int)input[0] >= 65 && (int)input[0] <= 72) && (int.Parse(input[1].ToString()) <= 8 && int.Parse(input[1].ToString()) >= 1) &&
                     ((int)input[2] >= 65 && (int)input[2] <= 72) && (int.Parse(input[3].ToString()) <= 8 && int.Parse(input[3].ToString()) >= 1))

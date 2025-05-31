@@ -34,8 +34,8 @@ namespace ChessGame.Draws
             bool BlackCanMove = false;
 
             //for every player's piece - check if the piece have valid move. if there is - return true
-            for (int i = 0;i<7;i++) 
-                for (int j = 0;j < 7; j++)
+            for (int i = 0;i < 8;i++) 
+                for (int j = 0;j < 8; j++)
                 {
                     if (board[i, j] != null && board[i, j].getColor() == playerTurn)
                     {
@@ -319,8 +319,8 @@ namespace ChessGame.Draws
 
 
             //for every player's piece - check if the piece have valid move. if there is - return true
-            for (int i = 0; i < 7; i++)
-                for (int j = 0; j < 7; j++)
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
                 {
                     if (board[i, j] != null && board[i, j].getColor() == playerTurn)
                     {
@@ -601,7 +601,10 @@ namespace ChessGame.Draws
                 }
 
             // if we checked all pieces scenerios and we dont see a option to move in the players turn, its stalemate
-            if (!BlackCanMove || !WhiteCanMove) return true;
+            if (!BlackCanMove || !WhiteCanMove) {
+                Console.Write("Stalemate - ");
+                return true;
+            }
             return false; 
         }
     }
