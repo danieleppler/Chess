@@ -21,6 +21,8 @@ namespace ChessGame
 
         public virtual bool Move(int currPieceRow, int currPieceColumn, int destRow, int destColumn, string player, Piece[,] board)
         {
+            //some restrictions that common to all pieces
+
             //prevent moving with the opponent piece
             if (board[currPieceRow, currPieceColumn].Color != player)
                 return false;

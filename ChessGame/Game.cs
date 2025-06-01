@@ -81,6 +81,7 @@ namespace ChessGame
             int row_source = 7 - (int.Parse(move[1].ToString()) - 1);
             int row_dest = 7 - (int.Parse(move[3].ToString()) - 1);
 
+            //if the piece that had been requested to move is a null place
             if (this.board[row_source, column_source] == null)
                 return false;
 
@@ -125,14 +126,14 @@ namespace ChessGame
                 board[6, i] = new Pawn("white");
             }
 
-            //place empty tiles
-            for (int i = 0; i < 8; i++)
-            {
-                board[2, i] = null;
-                board[3, i] = null;
-                board[4, i] = null;
-                board[5, i] = null;
-            }
+            ////place empty tiles
+            //for (int i = 0; i < 8; i++)
+            //{
+            //    board[2, i] = null;
+            //    board[3, i] = null;
+            //    board[4, i] = null;
+            //    board[5, i] = null;
+            //}
         }
 
         public void PrintBoard()
@@ -152,14 +153,14 @@ namespace ChessGame
             for (int i = 0; i < 8; i++)
                 Console.Write("  " + (char)(65 + i));
             Console.WriteLine();
-
+            Console.WriteLine("===========================");
         }
         
         public void startGame()
         {
             //for debug purposes
-            bool debugMode = true;
-            string[] InputForDebug = "e2e4;c7c5;g1f3;d7d6;d2d4;c5d4;f3d4;g8f6;b1c3;a7a6;c1g5;e7e6;f2f4;H7H6;G5H4;F8E7;D1F3;B8C6;E1C1;C8B6;D8B6;H8F2;H4F2;B6C7;G2G4;C6D4;F2D4;E6E5;F4E5;D6E5;F3G3;E7D6;D4F2;F6G4;F1B5;A6B5;C3B5;C7C6;B5D6;F7F6;E8E7;G3B3;C8E6;B3B4;E7F6;D6F5;H8C8;C2C3;G4F2;B4E7;F6G6;D1D6;C6E4;D6E6;G6H7;E6H6;F2H3;H7G8;E7F8;C8F8;G5E7;F5E7\r\n".ToUpper().Split(';');
+            bool debugMode = false;
+            string[] InputForDebug = "e2e4;c7c5;g1f3;d7d6;d2d4;c5d4;f3d4;g8f6;b1c3;a7a6;c1g5;e7e6;f2f4;H7H6;G5H4;F8E7;D1F3;B8C6;E1C1;C8B6;D8B6;H8F2;H4F2;B6C7;G2G4;C6D4;F2D4;E6E5;F4E5;D6E5;F3G3;E7D6;D4F2;F6G4;F1B5;A6B5;C3B5;C7C6;B5D6;F7F6;E8E7;G3B3;C8E6;B3B4;E7F6;D6F5;H8C8;C2C3;G4F2;B4E7;F6G6;D1D6;C6E4;D6E6;G6H7;E6H6;F2H3;H7G8;E7F8;C8F8;G5E7;F5E7".ToUpper().Split(';');
             int indexForDebug = 0;
 
             bool gameForfited = false;
@@ -207,7 +208,7 @@ namespace ChessGame
                         if(!this.WhitePlayerAskedForDraw && !this.BlackPlayerAskedForDraw)
                         {
                             //need to check if the king is in check right now. if so,we have to play the next move to protect him. either by blocking or capturing.That mean we need to check if there
-                            //a possible to do so . If not the game is in checkmate. if so , we pass check boolean var after move function and check if the new situation is still check
+                            //a possible to do so . If not the game is in checkmate. 
                             KingPlace = getKingPlace(whiteTurn ? "white" : "black");
                             KingInCheck = IsPieceInCaptureDanger(whiteTurn ? "white" : "black", KingPlace[0], KingPlace[1], this.board);
                             validPieceMove = PlayMove(userInput, whiteTurn ? "white" : "black");
@@ -219,7 +220,7 @@ namespace ChessGame
                                 {
                                     KingPlace = getKingPlace(whiteTurn ? "white" : "black");
                                     KingInCheck = IsPieceInCaptureDanger(whiteTurn ? "white" : "black", KingPlace[0], KingPlace[1], this.board);
-                                    if (isKingCanBeSaved(whiteTurn ? "white" : "black") && KingInCheck) //if the king is still in check and can be saved
+                                    if (isKingCanBeSaved(whiteTurn ? "white" : "black") && KingInCheck) //if the king is still in check and can be saved - the move is invalid
                                     {
                                         validGameMove = false;
                                         Console.WriteLine("invalid move.You can save your king and you have to do that. pleaes try again");
@@ -229,7 +230,7 @@ namespace ChessGame
                                 else
                                 {
                                     KingPlace = getKingPlace(whiteTurn ? "white" : "black");
-                                    KingInCheck = IsPieceInCaptureDanger(whiteTurn ? "white" : "black", KingPlace[0], KingPlace[1], this.board); //king is in check and wasnt in check before the player move
+                                    KingInCheck = IsPieceInCaptureDanger(whiteTurn ? "white" : "black", KingPlace[0], KingPlace[1], this.board); //king is in check and wasnt in check before the player move , move is invalid
                                     if (KingInCheck)
                                     {
                                         validGameMove = false;
@@ -242,7 +243,7 @@ namespace ChessGame
 
                     } while ((!validPieceMove || !validGameMove));
 
-                    //of no player asked for draw check this stats on the board
+                    //of no player asked for draw make these check on the board (info for three fold repetion / fifhty move rule draws)
                     if (!this.BlackPlayerAskedForDraw && !this.WhitePlayerAskedForDraw)
                     {
                         //check if there was capturing or pawn movement
@@ -260,12 +261,13 @@ namespace ChessGame
                         PrintBoard();
                     }
 
+                    //if one of the player asked for draw - ask the other player if hes agreeing
                     if (this.WhitePlayerAskedForDraw || this.BlackPlayerAskedForDraw)
                     {
                         bool validInput = false;
                         do
                         {
-                            Console.WriteLine("Opponent asked for draw. do you accept ? (Yes/No)");
+                            Console.WriteLine((this.BlackPlayerAskedForDraw ? "White":"Black")+" player , Opponent asked for draw. do you accept ? (Yes/No)");
                             userInput = Console.ReadLine();
                             if (userInput == "Yes")
                             {
@@ -285,9 +287,10 @@ namespace ChessGame
                     }
                     else
                     {
+                        //change turn
                         whiteTurn = !whiteTurn;
                     }
-                    //check win or draw
+                    //check for draw
                     if (checkForDraw(whiteTurn ? "white" : "black"))
                     {
                         Console.WriteLine("Thats a Draw!");
@@ -312,8 +315,14 @@ namespace ChessGame
             return [PieceRow, PieceColumn];
 
         }
-        private bool isKingCanBeSaved(string player)
+        bool isKingCanBeSaved(string player)
         {
+            //checking these conditions for each threat for the king :
+            //1.if the king can move to other place without capturing risk
+            //2.if the king can capture the threat without capturing risk
+            //3.if the threat can be captured by other piece of the player
+            //4.if the threat can be blocked by another piece of the player
+            //is one of these condition is met, the king can be saved
             string opponent = player == "white" ? "black" : "white";
             int[] KingsPlace = getKingPlace(player);
             int KingRow = KingsPlace[0];
@@ -647,7 +656,8 @@ namespace ChessGame
         }
 
         public bool IsPieceInCaptureDanger(string player, int PieceRow,int PieceColumn, Piece[,] board)
-        {          
+        {
+            //checking each potential threat on board
             for (int i = PieceRow +1 ; i < 8; i++) //check for Rooks/Queens threats in the same column down
             {
                 if (board[i, PieceColumn] is Piece && board[i, PieceColumn].getColor() == player ) break;
@@ -714,20 +724,6 @@ namespace ChessGame
                 if (PieceRow != 0 && PieceColumn != 7 && board[PieceRow -1 , PieceColumn + 1] is Pawn && board[PieceRow - 1, PieceColumn + 1].getColor() != player) return true;
             }
 
-       
-            ////Kings threats
-            //int[] KingPlace = getKingPlace(player);
-            //if(PieceRow != KingPlace[0] || PieceColumn != KingPlace[1]) //if the piece isnt a king
-            //{
-            //    if (PieceRow != 0 && PieceColumn != 0 && board[PieceRow - 1, PieceColumn - 1] is King && board[PieceRow - 1, PieceColumn - 1].getColor() != player) return true; // up left
-            //    if (PieceRow != 0 && board[PieceRow - 1, PieceColumn ] is King && board[PieceRow - 1, PieceColumn].getColor() != player) return true; // up left
-            //    if (PieceRow != 0 && PieceColumn != 7 && board[PieceRow - 1, PieceColumn + 1] is King && board[PieceRow - 1, PieceColumn + 1].getColor() != player) return true; // up right
-            //    if (PieceColumn != 7 && board[PieceRow , PieceColumn + 1] is King && board[PieceRow, PieceColumn + 1].getColor() != player) return true; // right
-            //    if (PieceRow != 7 && PieceColumn != 7 && board[PieceRow + 1, PieceColumn + 1] is King && board[PieceRow + 1, PieceColumn + 1].getColor() != player) return true; // down right
-            //    if (PieceRow != 7 && board[PieceRow + 1, PieceColumn] is King && board[PieceRow + 1, PieceColumn].getColor() != player) return true; // down
-            //    if (PieceRow != 7 && PieceColumn != 0 && board[PieceRow + 1, PieceColumn - 1] is King && board[PieceRow + 1, PieceColumn - 1].getColor() != player) return true; // down left
-            //    if (PieceColumn != 0 && board[PieceRow, PieceColumn - 1] is King && board[PieceRow, PieceColumn - 1].getColor() != player) return true; // left
-            //}
 
             //knights threats
             if ((PieceRow >= 2 && PieceColumn < 7) && board[PieceRow - 2, PieceColumn + 1] is Knight && (board[PieceRow - 2, PieceColumn + 1].getColor() != player)) return true;
@@ -753,6 +749,10 @@ namespace ChessGame
 
         bool checkForDraw(string player)
         {
+            //The idea of making the draws implement an interface and putting them in another files, is that if we want to add another draw 
+            //option we can just add the file , make hime implement the interface and add this item to the array. I am aware that there is some
+            //major logic that had been implemened in the Game class that had been needed in ThreeFoldRepetition.cs and FifhyMoveRuleDraw.cs and 
+            //it might miss the point a little , but i deicded to keep the implentation like this.
             IDraw[] draws = new IDraw[5];
             draws[0] = new ThreeFoldRepetitionDraw();
             draws[1] = new StalemateDraw();
