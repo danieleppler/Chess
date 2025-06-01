@@ -9,7 +9,7 @@ namespace ChessGame.Draws
     internal class FifhtyMoveRuleDraw : IDraw
     {
      
-        public bool IsDraw(Piece[,] board, Game currGame)
+        public bool IsDraw(Piece[,] board, Game currGame, string player)
         {
             if(currGame.GetLastMoveThereWasCapture() < currGame.GetMoveNum() - 50 &&
                 currGame.GetLastMoveWherePawnmoved() < currGame.GetMoveNum() - 50)

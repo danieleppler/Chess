@@ -8,65 +8,59 @@ namespace ChessGame.Pieces
 {
     public class Rook : Piece
     {
-        bool firstMove;
+
         public Rook(string _color) : base(_color)
         {
-            firstMove = true;
+          
         }
 
-        public override bool Move(int currPawnRow, int currPawnColumn, int destRow, int destColumn, string player, Piece[,] board)
+        public override bool Move(int currPieceRow, int currPieceColumn, int destRow, int destColumn, string player, Piece[,] board)
         {
 
-            if (!base.Move(currPawnRow, currPawnColumn, destRow, destColumn, player, board))
+            if (!base.Move(currPieceRow, currPieceColumn, destRow, destColumn, player, board))
                 return false;
 
             bool validMove = false;
 
             //up
-            if (currPawnRow > destRow && currPawnColumn == destColumn)
-                for (int i = currPawnRow - 1; i >= destRow ; i--)
+            if (currPieceRow > destRow && currPieceColumn == destColumn)
+                for (int i = currPieceRow - 1; i >= destRow ; i--)
                 {
                     if (i == destRow ) validMove = true;
-                    if (board[i, currPawnColumn] != null) break;
+                    if (board[i, currPieceColumn] != null) break;
                 }
 
             //down
-            if (!validMove && currPawnRow < destRow && currPawnColumn == destColumn)
-                for (int i = currPawnRow + 1; i <= destRow; i++)
+            if (!validMove && currPieceRow < destRow && currPieceColumn == destColumn)
+                for (int i = currPieceRow + 1; i <= destRow; i++)
                 {
                     if (i == destRow) validMove = true;
-                    if (board[i, currPawnColumn] != null) break;
+                    if (board[i, currPieceColumn] != null) break;
                 }
 
             //left
-            if (!validMove && currPawnRow == destRow && currPawnColumn > destColumn)
-                for (int i = currPawnColumn - 1; i >= destColumn; i--)
+            if (!validMove && currPieceRow == destRow && currPieceColumn > destColumn)
+                for (int i = currPieceColumn - 1; i >= destColumn; i--)
                 {
                     if (i == destColumn) validMove = true;
-                    if (board[currPawnRow, i] != null) break;
+                    if (board[currPieceRow, i] != null) break;
                 }
 
             //right
-            if (!validMove && currPawnRow == destRow && currPawnColumn < destColumn)
-                for (int i = currPawnColumn + 1; i <= destColumn; i++)
+            if (!validMove && currPieceRow == destRow && currPieceColumn < destColumn)
+                for (int i = currPieceColumn + 1; i <= destColumn; i++)
                 {
                     if (i == destColumn) validMove = true;
-                    if (board[currPawnRow, i] != null) break;
+                    if (board[currPieceRow, i] != null) break;
                 }
 
             if (!validMove)
                 return false;
 
-            if(firstMove) firstMove = false;
-            board[destRow, destColumn] = board[currPawnRow, currPawnColumn];
-            board[currPawnRow, currPawnColumn] = null;
+            board[destRow, destColumn] = board[currPieceRow, currPieceColumn];
+            board[currPieceRow, currPieceColumn] = null;
             return true;
 
-        }
-
-        public bool getFirstMove()
-        {
-            return firstMove;
         }
 
         public override string ToString()

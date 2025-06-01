@@ -5,12 +5,6 @@
  
         public Pawn(string _color) : base(_color)
         {
-
-        }
-
-        public int GetMoveNumber()
-        {
-            return this.MoveNumber;
         }
 
         public override bool Move(int currPawnRow, int currPawnColumn, int destRow, int destColumn, string player, Piece[,] board)

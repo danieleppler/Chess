@@ -12,25 +12,25 @@ namespace ChessGame.Pieces
         {
         }
 
-        public override bool Move(int currPawnRow, int currPawnColumn, int destRow, int destColumn, string player, Piece[,] board)
+        public override bool Move(int currPieceRow, int currPieceColumn, int destRow, int destColumn, string player, Piece[,] board)
         {
-            if (!base.Move(currPawnRow, currPawnColumn, destRow, destColumn, player, board))
+            if (!base.Move(currPieceRow, currPieceColumn, destRow, destColumn, player, board))
                 return false;
 
 
             bool validMove =false;
 
            //beneath right 
-           if(currPawnRow < destRow && currPawnColumn < destColumn)
-                for(int i = currPawnRow + 1,j = currPawnColumn + 1; i <= destRow && j <= destColumn; i++, j++)
+           if(currPieceRow < destRow && currPieceColumn < destColumn)
+                for(int i = currPieceRow + 1,j = currPieceColumn + 1; i <= destRow && j <= destColumn; i++, j++)
                 {
                     if (i == destRow && j == destColumn) validMove = true;
                     if (board[i, j] != null) break;
                 }
 
             //beneath left
-            if (!validMove && currPawnRow < destRow && currPawnColumn > destColumn)
-                for (int i = currPawnRow + 1, j = currPawnColumn - 1; i <= destRow && j >= destColumn; i++, j--)
+            if (!validMove && currPieceRow < destRow && currPieceColumn > destColumn)
+                for (int i = currPieceRow + 1, j = currPieceColumn - 1; i <= destRow && j >= destColumn; i++, j--)
                 {
                     if (i == destRow && j == destColumn) validMove = true;
                     if (board[i, j] != null) break;
@@ -38,8 +38,8 @@ namespace ChessGame.Pieces
                     
 
             //upper left
-            if (!validMove && currPawnRow > destRow && currPawnColumn > destColumn)
-                for (int i = currPawnRow - 1, j = currPawnColumn - 1; i >= destRow && j >= destColumn; i--, j--)
+            if (!validMove && currPieceRow > destRow && currPieceColumn > destColumn)
+                for (int i = currPieceRow - 1, j = currPieceColumn - 1; i >= destRow && j >= destColumn; i--, j--)
                 {
                     if (i == destRow && j == destColumn) validMove = true;
                     if (board[i, j] != null) break;
@@ -47,8 +47,8 @@ namespace ChessGame.Pieces
 
 
             //upper right 
-            if (!validMove && currPawnRow > destRow && currPawnColumn < destColumn)
-                for (int i = currPawnRow - 1, j = currPawnColumn + 1; i >= destRow && j <= destColumn; i--, j++)
+            if (!validMove && currPieceRow > destRow && currPieceColumn < destColumn)
+                for (int i = currPieceRow - 1, j = currPieceColumn + 1; i >= destRow && j <= destColumn; i--, j++)
                 {
                     if (i == destRow && j == destColumn) validMove = true;
                     if (board[i, j] != null) break;
@@ -58,8 +58,8 @@ namespace ChessGame.Pieces
             if (!validMove)
                 return false;
 
-            board[destRow, destColumn] = board[currPawnRow, currPawnColumn];
-            board[currPawnRow, currPawnColumn] = null;
+            board[destRow, destColumn] = board[currPieceRow, currPieceColumn];
+            board[currPieceRow, currPieceColumn] = null;
             return true;
         }
 

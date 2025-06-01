@@ -9,7 +9,7 @@ namespace ChessGame.Draws
     internal class ThreeFoldRepetitionDraw : IDraw
     {
         
-        public bool IsDraw(Piece[,] board, Game currGame)
+        public bool IsDraw(Piece[,] board, Game currGame, string playerTurn)
         {
             string[] boardsMemory = currGame.GetBoardMemory();
             for (int i = 0; i < boardsMemory.Length && boardsMemory[i] != null; i++) { 

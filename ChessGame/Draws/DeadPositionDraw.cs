@@ -4,7 +4,7 @@ namespace ChessGame.Draws
 {
     internal class DeadPositionDraw : IDraw
     {
-        public bool IsDraw(Piece[,] board, Game currGame)
+        public bool IsDraw(Piece[,] board, Game currGame,string player)
         {
             //king vs king
             bool kingVsKing = true;

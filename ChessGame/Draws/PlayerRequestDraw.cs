@@ -8,7 +8,7 @@ namespace ChessGame.Draws
 {
     internal class PlayerRequestDraw : IDraw
     {
-        public bool IsDraw(Piece[,] board, Game currGame)
+        public bool IsDraw(Piece[,] board, Game currGame,string playerTurn)
         {
             if(currGame.IsWhitePlayerAskedForDraw() && currGame.IsBlackPlayerAskedForDraw())
             {

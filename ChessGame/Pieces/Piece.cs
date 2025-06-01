@@ -19,13 +19,13 @@ namespace ChessGame
         }
 
 
-        public virtual bool Move(int currPawnRow, int currPawnColumn, int destRow, int destColumn, string player, Piece[,] board)
+        public virtual bool Move(int currPieceRow, int currPieceColumn, int destRow, int destColumn, string player, Piece[,] board)
         {
             //prevent moving with the opponent piece
-            if (board[currPawnRow, currPawnColumn].Color != player)
+            if (board[currPieceRow, currPieceColumn].Color != player)
                 return false;
             //if its the same place
-            if (currPawnRow == destRow && currPawnColumn == destColumn)
+            if (currPieceRow == destRow && currPieceColumn == destColumn)
                 return false;
             //if the place is occupied by the same player piece
             if (board[destRow, destColumn] != null && board[destRow, destColumn].Color == player)
@@ -45,6 +45,11 @@ namespace ChessGame
                 return false;
             this.Color = _color.ToLower();
             return true;
+        }
+
+        public int GetMoveNumber()
+        {
+            return MoveNumber;
         }
 
         public override string ToString()
