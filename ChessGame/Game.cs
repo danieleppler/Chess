@@ -160,7 +160,7 @@ namespace ChessGame
         {
             //for debug purposes
             bool debugMode = false;
-            string[] InputForDebug = "E2E3;A7A5;D1H5;A8A6;H5A5;H7H5;A5C7;A6H6;H2H4;F7F6;C7D7;E8F7;D7B7;D8D3;B7B8;D3H7;B8C8;F7G6;C8E6\r\n".ToUpper().Split(';');
+            string[] InputForDebug = "E2E3;A7A5;D1H5;A8A6;H5A5;H7H5;A5C7;A6H6;H2H4;F7F6;C7D7;E8F7;D7B7;D8D3;B7B8;D3H7;B8C8;F7G6;C8E6".ToUpper().Split(';');
             int indexForDebug = 0;
 
             bool gameForfited = false;
@@ -546,8 +546,8 @@ namespace ChessGame
                        || ((KingRow != 0 && (board[KingRow - 1, KingColumn] == null || board[KingRow - 1, KingColumn ].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn, this.board)) || //up
                        ((KingColumn != 0 && KingRow != 0 && (board[KingRow - 1, KingColumn - 1] == null || board[KingRow - 1, KingColumn - 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board)) || // up left
                        ((KingColumn != 7 && KingRow != 0 && (board[KingRow - 1, KingColumn + 1] == null || board[KingRow -1 , KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)) || // up right
-                       ((KingColumn != 7 && (board[KingRow, KingColumn + 1] == null || board[KingRow , KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board)))) //right 
-                    || IsPieceInCaptureDanger(opponent, KingRow - 2, KingColumn + 1, this.board)) return false;  //if the knight can be captured
+                       ((KingColumn != 7 && (board[KingRow, KingColumn + 1] == null || board[KingRow , KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board))) //right 
+                    || IsPieceInCaptureDanger(opponent, KingRow - 2, KingColumn + 1, this.board))) return false;  //if the knight can be captured
             }
             if ((KingRow >= 2 && KingColumn > 0) && board[KingRow- 2, KingColumn- 1] is Knight && (board[KingRow- 2, KingColumn- 1].getColor() != player))
             {
