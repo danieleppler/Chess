@@ -11,8 +11,8 @@ namespace ChessGame.Draws
      
         public bool IsDraw(Piece[,] board, Game currGame, string player)
         {
-            if(currGame.GetLastMoveThereWasCapture() < currGame.GetMoveNum() - 50 &&
-                currGame.GetLastMoveWherePawnmoved() < currGame.GetMoveNum() - 50)
+            if(currGame.GetLastMoveThereWasCapture() <= currGame.GetMoveNum() - 100 &&
+                currGame.GetLastMoveWherePawnmoved() <= currGame.GetMoveNum() - 100)
             {
                 Console.Write("Fifthy move rule - ");
                 return true;

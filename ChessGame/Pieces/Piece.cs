@@ -40,6 +40,17 @@ namespace ChessGame
         {
             return Color;
         }
+    
+        public bool setMoveNumber(int _moveNum)
+        {
+            if (_moveNum >= 0)
+            {
+                this.MoveNumber = _moveNum;
+                return true;
+            }
+            else return false;
+                
+        }
 
         public bool setColor(string _color)
         {

@@ -70,14 +70,12 @@ namespace ChessGame.Pieces
             {
                 board[CastlingRow, 5] = board[CastlingRow, 7];
                 board[CastlingRow, 7] = null;
-                Console.WriteLine("player used castling");
             }
 
             if(castling && destColumn < currPieceColumn)
             {
                 board[CastlingRow, 3] = board[CastlingRow, 7];
                 board[CastlingRow, 0] = null;
-                Console.WriteLine("player used castling");
             }
 
             board[destRow, destColumn] = board[currPieceRow, currPieceColumn];

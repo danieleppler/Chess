@@ -5,8 +5,7 @@ namespace ChessGame
     {
         static void Main(string[] args)
         {
-            Game g1 = new Game();
-            g1.startGame();
+            new Game().startGame();
         }
 
     }

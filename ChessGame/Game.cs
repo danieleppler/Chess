@@ -7,7 +7,7 @@ namespace ChessGame
 {
     public class Game
     {
-        int MoveNumbr;
+        int MoveNumbr = 98;
         int LastMoveThereWasCapture;
         int LastMoveWherePawnMoved;
         bool WhitePlayerAskedForDraw;
@@ -93,25 +93,26 @@ namespace ChessGame
         {
             board = new Piece[8, 8];
 
-            //place Rooks
+            ////place Rooks
             board[7, 0] = new Rook("white");
             board[7, 7] = new Rook("white");
             board[0, 0] = new Rook("black");
             board[0, 7] = new Rook("black");
 
-            //place Knights
+            ////place Knights
             board[7, 1] = new Knight("white");
             board[7, 6] = new Knight("white");
             board[0, 1] = new Knight("black");
             board[0, 6] = new Knight("black");
 
-            //place Bishops
+            ////place Bishops
             board[7, 2] = new Bishop("white");
             board[7, 5] = new Bishop("white");
             board[0, 2] = new Bishop("black");
             board[0, 5] = new Bishop("black");
 
-            //place Queens
+
+            ////place Queens
             board[7, 3] = new Queen("white");
             board[0, 3] = new Queen("black");
 
@@ -119,14 +120,15 @@ namespace ChessGame
             board[7, 4] = new King("white");
             board[0, 4] = new King("black");
 
-            //place pawns
+            ////place pawns
             for (int i = 0; i < 8; i++)
             {
                 board[1, i] = new Pawn("black");
                 board[6, i] = new Pawn("white");
             }
 
-            ////place empty tiles
+
+            //place empty tiles
             //for (int i = 0; i < 8; i++)
             //{
             //    board[2, i] = null;
@@ -160,7 +162,7 @@ namespace ChessGame
         {
             //for debug purposes
             bool debugMode = false;
-            string[] InputForDebug = "E2E3;A7A5;D1H5;A8A6;H5A5;H7H5;A5C7;A6H6;H2H4;F7F6;C7D7;E8F7;D7B7;D8D3;B7B8;D3H7;B8C8;F7G6;C8E6".ToUpper().Split(';');
+            string[] InputForDebug = "A2A4;D7D6;A1A3;C8E6;H2H3;C7C6;C2C4;D8A5;D1B3;E8D8;B3G3;D8E8;G3H2;E8D8;A3G3;E6C4;F2F3;C4B3;D2D4;B1C3;E7E5;C3B5;A5A6\r\n".ToUpper().Split(';');
             int indexForDebug = 0;
 
             bool gameForfited = false;
@@ -178,7 +180,7 @@ namespace ChessGame
                 //check if the player previously played had won the game
                 if (checkForWin(whiteTurn ? "black" : "white"))
                 {
-                    Console.WriteLine((whiteTurn ? "black " : "white ") + "player won!");
+                    Console.WriteLine("CheckMate - " + (whiteTurn ? "black " : "white ") + "player won!");
                     gameForfited = true;
                 }
                 if (!gameForfited) //if the player previously played hasnt won the game
@@ -225,6 +227,9 @@ namespace ChessGame
                                         validGameMove = false;
                                         Console.WriteLine("invalid move.You can save your king and you have to do that. pleaes try again");
                                         board = MakenewCopyOfBoard(PrevBoard);
+                                        int row_source = 7 - (int.Parse(userInput[1].ToString()) - 1);
+                                        int column_source = 7 - (72 % ((char)userInput[0]));
+                                        this.board[row_source, column_source].setMoveNumber(this.board[row_source, column_source].GetMoveNumber() - 1);//decrease moved piece moves number by one
                                     }
                                 }
                                 else
@@ -236,6 +241,9 @@ namespace ChessGame
                                         validGameMove = false;
                                         Console.WriteLine("invalid move.You expose your kings to check. pleaes try again");
                                         board = MakenewCopyOfBoard(PrevBoard);
+                                        int row_source = 7 - (int.Parse(userInput[1].ToString()) - 1);
+                                        int column_source = 7 - (72 % ((char)userInput[0]));
+                                        this.board[row_source, column_source].setMoveNumber(this.board[row_source, column_source].GetMoveNumber() - 1);//decrease moved piece moves number by one
                                     }
                                 }
                             }
@@ -243,7 +251,7 @@ namespace ChessGame
 
                     } while ((!validPieceMove || !validGameMove));
 
-                    //of no player asked for draw make these check on the board (info for three fold repetion / fifhty move rule draws)
+                    //of no player asked for draw make these check on the board (info for three fold repetion / fifhty move rule draws) 
                     if (!this.BlackPlayerAskedForDraw && !this.WhitePlayerAskedForDraw)
                     {
                         //check if there was capturing or pawn movement
@@ -259,6 +267,7 @@ namespace ChessGame
                         this.boardsMemory[MoveNumbr] = this.ConvertBoardToString(board);
                         this.MoveNumbr++;
                         PrintBoard();
+                        
                     }
 
                     //if one of the player asked for draw - ask the other player if hes agreeing
@@ -337,21 +346,25 @@ namespace ChessGame
                 {
                     //if king can move to other tile
                     if (((KingColumn != 0 && (board[KingRow, KingColumn - 1] == null || board[KingRow, KingColumn - 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow, KingColumn - 1, this.board)) ||
-                        ((KingColumn != 0 && (board[KingRow + 1, KingColumn - 1] == null || board[KingRow + 1, KingColumn - 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn - 1, this.board)) ||
+                        ((KingColumn != 0 && KingRow != 7 && (board[KingRow + 1, KingColumn - 1] == null || board[KingRow + 1, KingColumn - 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn - 1, this.board)) ||
                         ((KingColumn != 0 && KingRow != 0 && (board[KingRow - 1, KingColumn - 1] == null || board[KingRow - 1, KingColumn - 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board))
                         || ((KingColumn != 7 && (board[KingRow, KingColumn + 1] == null || board[KingRow, KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board)) ||
-                        ((KingColumn != 7 && (board[KingRow + 1, KingColumn + 1] == null || board[KingRow + 1, KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn + 1, this.board)) ||
+                        ((KingColumn != 7 && KingRow != 7 && (board[KingRow + 1, KingColumn + 1] == null || board[KingRow + 1, KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn + 1, this.board)) ||
                         ((KingColumn != 7 && KingRow != 0 && (board[KingRow - 1, KingColumn + 1] == null || board[KingRow - 1, KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)))
                         break;
                     //if this opponent piece can be captured
                     if (IsPieceInCaptureDanger(player, i, KingColumn, this.board)) break;
                     //if current player piece can block the route
+                    bool CanBeBlocked = false;
                     for (int j = i  - 1 ; j > KingRow; j--)
                     {
-                        if (IsPieceInCaptureDanger(opponent, j, KingColumn, this.board))
-                            break;
+                        if (isPlaceCanBeReached(opponent, j, KingColumn, this.board))
+                        {
+                            CanBeBlocked = true; break;
+                        }
                     }
-                    return false;
+                    if(!CanBeBlocked)
+                        return false;
                 }
             }
             for (int i = KingRow - 1; i >= 0; i--) //check for Rooks/Queens threats in the same column up
@@ -362,21 +375,25 @@ namespace ChessGame
                 {
                     //if king can move to other tile
                     if (((KingColumn != 0 && (board[KingRow, KingColumn - 1] == null || board[KingRow, KingColumn - 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow, KingColumn - 1, this.board)) ||
-                        ((KingColumn != 0 && (board[KingRow + 1, KingColumn - 1] == null || board[KingRow + 1, KingColumn - 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn - 1, this.board)) ||
+                        ((KingColumn != 0 && KingRow != 7 && (board[KingRow + 1, KingColumn - 1] == null || board[KingRow + 1, KingColumn - 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn - 1, this.board)) ||
                         ((KingColumn != 0 && KingRow != 0 && (board[KingRow - 1, KingColumn - 1] == null || board[KingRow - 1, KingColumn - 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn - 1, this.board))
                         || ((KingColumn != 7 && (board[KingRow, KingColumn + 1] == null || board[KingRow, KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow, KingColumn + 1, this.board)) ||
-                        ((KingColumn != 7 && (board[KingRow + 1, KingColumn + 1] == null || board[KingRow + 1, KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn + 1, this.board)) ||
+                        ((KingColumn != 7 && KingRow != 7 && (board[KingRow + 1, KingColumn + 1] == null || board[KingRow + 1, KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow + 1, KingColumn + 1, this.board)) ||
                         ((KingColumn != 7 && KingRow != 0 && (board[KingRow - 1, KingColumn + 1] == null || board[KingRow - 1, KingColumn + 1].getColor() != player)) && !IsPieceInCaptureDanger(player, KingRow - 1, KingColumn + 1, this.board)))
                         break;
                     //if this piece can be captured
                     if (IsPieceInCaptureDanger(opponent, i, KingColumn, this.board)) break;
                     //if other piece can block the route
+                    bool CanBeBlocked = false;
                     for (int j = i + 1; j < KingRow; j++)
                     {
-                        if (IsPieceInCaptureDanger(opponent == "white" ? "black" : "white", j, KingColumn, this.board))
-                            break;
+                        if (isPlaceCanBeReached(opponent, j, KingColumn, this.board))
+                        {
+                            CanBeBlocked=true; break;
+                        }
                     }
-                    return false;
+                    if(!CanBeBlocked)
+                        return false;
                 }
             }
             for (int i = KingColumn + 1; i < 8; i++) //check for Rooks/Queens threats in the same row right
@@ -396,12 +413,16 @@ namespace ChessGame
                     //if this piece can be captured
                     if (IsPieceInCaptureDanger(opponent, KingRow, i, this.board)) break;
                     //if other piece can block the route
+                    bool CanBeBlocked = false;
                     for (int j = i -1 ; j > KingColumn; j--)
                     {
-                        if (IsPieceInCaptureDanger(opponent, KingRow, j, this.board))
-                            break;
+                        if (isPlaceCanBeReached(opponent, KingRow, j, this.board))
+                        {
+                            CanBeBlocked = true; break;
+                        }
                     }
-                    return false;
+                    if(!CanBeBlocked)
+                        return false;
                 }
             }
             for (int i = KingColumn - 1; i >= 0; i--) //check for Rooks/Queens threats in the same row left
@@ -421,12 +442,16 @@ namespace ChessGame
                     //if this piece can be captured
                     if (IsPieceInCaptureDanger(opponent, KingRow, i, this.board)) break;
                     //if other piece can block the route
+                    bool CanBeBlocked = false;
                     for (int j = i + 1; j < KingColumn; j++)
                     {
-                        if (IsPieceInCaptureDanger(player == "white" ? "black" : "white", KingRow, j, this.board))
-                            break;
+                        if (isPlaceCanBeReached(opponent, KingRow, j, this.board))
+                        {
+                            CanBeBlocked=true; break;
+                        }
                     }
-                    return false;
+                    if(!CanBeBlocked)
+                        return false;
                 }
             }
 
@@ -449,12 +474,16 @@ namespace ChessGame
                     //if this piece can be captured NOT BY THE KING
                     if (IsPieceInCaptureDanger(opponent, i, j, this.board)) break;
                     //if other piece can block the route
+                    bool CanBeBlocked = false;
                     for (int m = i -1, n = j - 1 ; m > KingRow && n > KingColumn; m-- , n--)
                     {
-                        if (IsPieceInCaptureDanger(opponent, m, n, this.board))
-                            break;
+                        if (isPlaceCanBeReached(opponent, m, n, this.board))
+                        {
+                            CanBeBlocked = true; break;
+                        }
                     }
-                    return false;
+                    if(!CanBeBlocked)
+                        return false;
                 }
             }
             for (int i = KingRow + 1, j = KingColumn - 1; i < 8 && j >= 0; i++, j--) //check for Bishops threats diagonly left down
@@ -474,12 +503,16 @@ namespace ChessGame
                     //if this piece can be captured
                     if (IsPieceInCaptureDanger(opponent, i, j, this.board)) break;
                     //if other piece can block the route
+                    bool CanBeBlocked = false;
                     for (int m = i - 1, n = j + 1; m > KingRow && n < KingColumn; m--, n++)
                     {
-                        if (IsPieceInCaptureDanger(opponent, m, n, this.board))
-                            break;
+                        if (isPlaceCanBeReached(opponent, m, n, this.board))
+                        {
+                            CanBeBlocked = true;break;
+                        }
                     }
-                    return false;
+                    if(!CanBeBlocked)
+                        return false;
                 }
             }
             for (int i = KingRow - 1, j = KingColumn + 1; i >= 0 && j < 8; i--, j++) //check for Bishops threats diagonly right up
@@ -499,12 +532,17 @@ namespace ChessGame
                     //if this piece can be captured
                     if (IsPieceInCaptureDanger(opponent, i, j, this.board)) break;
                     //if other piece can block the route
+                    bool CanBeBlocked = false;
                     for (int m = i + 1, n = j - 1; m < KingRow && n > KingColumn; m++, n--)
                     {
-                        if (IsPieceInCaptureDanger(opponent , m, n, this.board))
-                            break;
+                        if (isPlaceCanBeReached(opponent, m, n, this.board))
+                        {
+                            CanBeBlocked=true; break;
+                        }
+                           
                     }
-                    return false;
+                    if(!CanBeBlocked)
+                        return false;
                 }
             }
             for (int i = KingRow - 1, j = KingColumn - 1; i >= 0 && j >= 0; i--, j--) //check for Bishops threats diagonly left up
@@ -524,12 +562,16 @@ namespace ChessGame
                     //if this piece can be captured
                     if (IsPieceInCaptureDanger(opponent, i, j, this.board)) break;
                     //if other piece can block the route
+                    bool CanBeBlocked = false;
                     for (int m = i + 1, n = j + 1; m < KingRow && n < KingColumn; m++, n++)
                     {
-                        if (IsPieceInCaptureDanger(opponent, m, n, this.board))
-                            break;
+                        if (isPlaceCanBeReached(opponent, m, n, this.board))
+                        {
+                            CanBeBlocked = true; break;
+                        }
                     }
-                    return false;
+                    if (!CanBeBlocked) 
+                        return false;
                 }
             }
 
@@ -655,6 +697,89 @@ namespace ChessGame
             return newBoard;
         }
 
+        public bool isPlaceCanBeReached(string player, int PieceRow, int PieceColumn, Piece[,] board)
+        {
+            //checking each potential threat on board
+            for (int i = PieceRow + 1; i < 8; i++) //check for Rooks/Queens threats in the same column down
+            {
+                if (board[i, PieceColumn] is Piece && board[i, PieceColumn].getColor() == player) break;
+                if (board[i, PieceColumn] is Queen || board[i, PieceColumn] is Rook) return true;
+                if (board[i, PieceColumn] != null) break;
+            }
+            for (int i = PieceRow - 1; i >= 0; i--) //check for Rooks/Queens threats in the same column up
+            {
+                if (board[i, PieceColumn] is Piece && board[i, PieceColumn].getColor() == player) break;
+                if (board[i, PieceColumn] is Queen || board[i, PieceColumn] is Rook) return true;
+                if (board[i, PieceColumn] != null) break;
+            }
+            for (int i = PieceColumn + 1; i < 8; i++) //check for Rooks/Queens threats in the same row to the right
+            {
+                if (board[PieceRow, i] is Piece && board[PieceRow, i].getColor() == player) break;
+                if (board[PieceRow, i] is Queen || board[PieceRow, i] is Rook) return true;
+                if (board[PieceRow, i] != null) break;
+            }
+
+            for (int i = PieceColumn - 1; i >= 0; i--) //check for Rooks/Queens threats in the same row to the left
+            {
+                if (board[PieceRow, i] is Piece && board[PieceRow, i].getColor() == player) break;
+                if (board[PieceRow, i] is Queen || board[PieceRow, i] is Rook) return true;
+                if (board[PieceRow, i] != null) break;
+            }
+
+            for (int i = PieceRow + 1, j = PieceColumn + 1; i < 8 && j < 8; i++, j++) //check for Queens/Bishops threats diagonly right down
+            {
+                if (board[i, j] is Piece && board[i, j].getColor() == player) break;
+                if (board[i, j] is Queen || board[i, j] is Bishop) return true;
+                if (board[i, j] != null) break;
+            }
+
+            for (int i = PieceRow + 1, j = PieceColumn - 1; i < 8 && j >= 0; i++, j--) //check for Bishops threats diagonly left down
+            {
+                if (board[i, j] is Piece && board[i, j].getColor() == player) break;
+                if (board[i, j] is Queen || board[i, j] is Bishop) return true;
+                if (board[i, j] != null) break;
+            }
+
+            for (int i = PieceRow - 1, j = PieceColumn + 1; i >= 0 && j < 8; i--, j++) //check for Bishops threats diagonly right up
+            {
+                if (board[i, j] is Piece && board[i, j].getColor() == player) break;
+                if (board[i, j] is Queen || board[i, j] is Bishop) return true;
+                if (board[i, j] != null) break;
+            }
+
+            for (int i = PieceRow - 1, j = PieceColumn - 1; i >= 0 && j >= 0; i--, j--) //check for Bishops threats diagonly left up
+            {
+                if (board[i, j] is Piece && board[i, j].getColor() == player) break;
+                if (board[i, j] is Queen || board[i, j] is Bishop) return true;
+                if (board[i, j] != null) break;
+            }
+
+            // Pawns threats
+         
+            if (board[PieceRow, PieceColumn] == null)
+            {
+                if (player == "black")
+                    if (PieceRow != 7 && board[PieceRow + 1, PieceColumn] is Pawn && board[PieceRow + 1, PieceColumn].getColor() != player) return true;
+                if (player == "white")
+                    if (PieceRow != 0 && board[PieceRow - 1, PieceColumn] is Pawn && board[PieceRow - 1, PieceColumn].getColor() != player) return true;
+            }
+
+        
+
+
+            //knights threats
+            if ((PieceRow >= 2 && PieceColumn < 7) && board[PieceRow - 2, PieceColumn + 1] is Knight && (board[PieceRow - 2, PieceColumn + 1].getColor() != player)) return true;
+            if ((PieceRow >= 2 && PieceColumn > 0) && board[PieceRow - 2, PieceColumn - 1] is Knight && (board[PieceRow - 2, PieceColumn - 1].getColor() != player)) return true;
+            if ((PieceRow >= 1 && PieceColumn < 6) && board[PieceRow - 1, PieceColumn + 2] is Knight && (board[PieceRow - 1, PieceColumn + 2].getColor() != player)) return true;
+            if ((PieceRow >= 1 && PieceColumn > 1) && board[PieceRow - 1, PieceColumn - 2] is Knight && (board[PieceRow - 1, PieceColumn - 2].getColor() != player)) return true;
+            if ((PieceRow < 7 && PieceColumn < 6) && board[PieceRow + 1, PieceColumn + 2] is Knight && (board[PieceRow + 1, PieceColumn + 2].getColor() != player)) return true;
+            if ((PieceRow < 7 && PieceColumn > 1) && board[PieceRow + 1, PieceColumn - 2] is Knight && (board[PieceRow + 1, PieceColumn - 2].getColor() != player)) return true;
+            if ((PieceRow < 6 && PieceColumn < 7) && board[PieceRow + 2, PieceColumn + 1] is Knight && (board[PieceRow + 2, PieceColumn + 1].getColor() != player)) return true;
+            if ((PieceRow < 6 && PieceColumn > 0) && board[PieceRow + 2, PieceColumn - 1] is Knight && (board[PieceRow + 2, PieceColumn - 1].getColor() != player)) return true;
+
+            return false;
+        }
+
         public bool IsPieceInCaptureDanger(string player, int PieceRow,int PieceColumn, Piece[,] board)
         {
             //checking each potential threat on board
@@ -691,7 +816,7 @@ namespace ChessGame
                 if (board[i, j] != null) break;
             }
 
-            for (int i = PieceRow + 1, j = PieceColumn - 1; i < 8 && j > 0; i++, j--) //check for Bishops threats diagonly left down
+            for (int i = PieceRow + 1, j = PieceColumn - 1; i < 8 && j >= 0; i++, j--) //check for Bishops threats diagonly left down
             {
                 if (board[i, j] is Piece && board[i, j].getColor() == player ) break;
                 if (board[i, j] is Queen || board[i, j] is Bishop ) return true;
@@ -705,7 +830,7 @@ namespace ChessGame
                 if (board[i, j] != null) break;
             }
 
-            for (int i = PieceRow - 1, j = PieceColumn - 1; i >= 0 && j > 0; i--, j--) //check for Bishops threats diagonly left up
+            for (int i = PieceRow - 1, j = PieceColumn - 1; i >= 0 && j >= 0; i--, j--) //check for Bishops threats diagonly left up
             {
                 if (board[i, j] is Piece && board[i, j].getColor() == player ) break;
                 if (board[i, j] is Queen || board[i, j] is Bishop  ) return true;
@@ -713,16 +838,18 @@ namespace ChessGame
             }
 
             //Pawns threats
-            if(player == "black")
-            {
-                if (PieceRow != 7 && PieceColumn != 0 && board[PieceRow + 1, PieceColumn - 1] is Pawn && board[PieceRow + 1, PieceColumn - 1].getColor() != player) return true;
-                if (PieceRow != 7 && PieceColumn != 7 && board[PieceRow + 1, PieceColumn + 1] is Pawn && board[PieceRow + 1, PieceColumn + 1].getColor() != player) return true;
-            }
-            else
-            {
-                if (PieceRow != 0 && PieceColumn != 0 && board[PieceRow - 1, PieceColumn - 1] is Pawn && board[PieceRow - 1, PieceColumn - 1].getColor() != player) return true;
-                if (PieceRow != 0 && PieceColumn != 7 && board[PieceRow -1 , PieceColumn + 1] is Pawn && board[PieceRow - 1, PieceColumn + 1].getColor() != player) return true;
-            }
+     
+                if (player == "black")
+                {
+                    if (PieceRow != 7 && PieceColumn != 0 && board[PieceRow + 1, PieceColumn - 1] is Pawn && board[PieceRow + 1, PieceColumn - 1].getColor() != player) return true;
+                    if (PieceRow != 7 && PieceColumn != 7 && board[PieceRow + 1, PieceColumn + 1] is Pawn && board[PieceRow + 1, PieceColumn + 1].getColor() != player) return true;
+                }
+                else
+                {
+                    if (PieceRow != 0 && PieceColumn != 0 && board[PieceRow - 1, PieceColumn - 1] is Pawn && board[PieceRow - 1, PieceColumn - 1].getColor() != player) return true;
+                    if (PieceRow != 0 && PieceColumn != 7 && board[PieceRow - 1, PieceColumn + 1] is Pawn && board[PieceRow - 1, PieceColumn + 1].getColor() != player) return true;
+                }
+            //}
 
 
             //knights threats
@@ -742,8 +869,11 @@ namespace ChessGame
         {
             string opponent = player == "white" ? "black" : "white";
             int[] KingPlace = getKingPlace(opponent);
+            bool KingInCheck = IsPieceInCaptureDanger(opponent, KingPlace[0], KingPlace[1], this.board);
+            if (KingInCheck)
+                Console.WriteLine("{0} king is in check", opponent);
             //if the opponent king is in check and the king canot be save - its a checkmate 
-            if (IsPieceInCaptureDanger(opponent, KingPlace[0], KingPlace[1], this.board) && !isKingCanBeSaved(opponent)) return true;
+            if (KingInCheck && !isKingCanBeSaved(opponent)) return true;
             return false;
         }
 
@@ -774,10 +904,18 @@ namespace ChessGame
                 Console.WriteLine((Whiteturn ? "White " : "Black ") + "Turn , enter your move , Or Ask for a draw (Type DRAW)");
                 input = Console.ReadLine().Trim().ToUpper();
                 if (input == "DRAW") return "DRAW";
-                if (input.Length == 4 && ((int)input[0] >= 65 && (int)input[0] <= 72) && (int.Parse(input[1].ToString()) <= 8 && int.Parse(input[1].ToString()) >= 1) &&
-                    ((int)input[2] >= 65 && (int)input[2] <= 72) && (int.Parse(input[3].ToString()) <= 8 && int.Parse(input[3].ToString()) >= 1))
-                    validInput = true;
-                else Console.Write("Invalid input. ");
+                if(input.Length == 4 && ((int)input[1] >= 65 && (int)input[1] <= 89 || (int)input[3] >= 65 && (int)input[3] <=89 ))
+                {
+                    Console.WriteLine("invalid input.");
+                }
+                else
+                {
+                    if (input.Length == 4 && ((int)input[0] >= 65 && (int)input[0] <= 72) && (int.Parse(input[1].ToString()) <= 8 && int.Parse(input[1].ToString()) >= 1) &&
+                                       ((int)input[2] >= 65 && (int)input[2] <= 72) && (int.Parse(input[3].ToString()) <= 8 && int.Parse(input[3].ToString()) >= 1))
+                        validInput = true;
+                    else Console.Write("Invalid input. ");
+                }
+               
             }
             return input;
         }
