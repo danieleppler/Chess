@@ -12,84 +12,18 @@ namespace ChessGame.Pieces
         {
         }
 
-        public override bool Move(int currPieceRow, int currPieceColumn, int destRow, int destColumn, string player, Piece[,] board)
+        public override bool IsLegalMove(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
         {
-            if (!base.Move(currPieceRow, currPieceColumn, destRow, destColumn, player, board))
+            if (!base.IsLegalMove(source, destination, player, board))
                 return false;
 
-            bool validMove = false;
-
-            //up
-            if (currPieceRow > destRow && currPieceColumn == destColumn)
-                for (int i = currPieceRow - 1; i >= destRow; i--)
-                {
-                    if (i == destRow) validMove = true;
-                    if (board[i, currPieceColumn] != null) break;
-                }
-
-            //down
-            if (!validMove && currPieceRow < destRow && currPieceColumn == destColumn)
-                for (int i = currPieceRow + 1; i <= destRow; i++)
-                {
-                    if (i == destRow) validMove = true;
-                    if (board[i, currPieceColumn] != null) break;
-                }
-
-            //left
-            if (!validMove && currPieceRow == destRow && currPieceColumn > destColumn)
-                for (int i = currPieceColumn - 1; i >= destColumn; i--)
-                {
-                    if (i == destColumn) validMove = true;
-                    if (board[currPieceRow, i] != null) break;
-                }
-
-            //right
-            if (!validMove && currPieceRow == destRow && currPieceColumn < destColumn)
-                for (int i = currPieceColumn + 1; i <= destColumn; i++)
-                {
-                    if (i == destColumn) validMove = true;
-                    if (board[currPieceRow, i] != null) break;
-                }
-
-            //beneath right 
-            if (currPieceRow < destRow && currPieceColumn < destColumn)
-                for (int i = currPieceRow + 1, j = currPieceColumn + 1; i <= destRow && j <= destColumn; i++, j++)
-                {
-                    if (i == destRow && j == destColumn) validMove = true;
-                    if (board[i, j] != null) break;
-                }
-
-            //beneath left
-            if (!validMove && currPieceRow < destRow && currPieceColumn > destColumn)
-                for (int i = currPieceRow + 1, j = currPieceColumn - 1; i <= destRow && j >= destColumn; i++, j--)
-                {
-                    if (i == destRow && j == destColumn) validMove = true;
-                    if (board[i, j] != null) break;
-                }
-
-
-            //upper left
-            if (!validMove && currPieceRow > destRow && currPieceColumn > destColumn)
-                for (int i = currPieceRow - 1, j = currPieceColumn - 1; i >= destRow && j >= destColumn; i--, j--)
-                {
-                    if (i == destRow && j == destColumn) validMove = true;
-                    if (board[i, j] != null) break;
-                }
-
-
-            //upper right 
-            if (!validMove && currPieceRow > destRow && currPieceColumn < destColumn)
-                for (int i = currPieceRow - 1, j = currPieceColumn + 1; i >= destRow && j <= destColumn; i--, j++)
-                {
-                    if (i == destRow && j == destColumn) validMove = true;
-                    if (board[i, j] != null) break;
-                }
-
-            if (!validMove)
-                return false;
-
-            board[destRow, destColumn] = board[currPieceRow, currPieceColumn];
-            board[currPieceRow, currPieceColumn] = null;
+           Rook queenAsARook = new Rook(player);
+           Bishop queenAsABishop = new Bishop(player);
+           if(queenAsARook.IsLegalMove(source,destination,player,board) || queenAsABishop.IsLegalMove(source, destination, player, board))
+            {
+                board[destination.row, destination.col] = board[source.row, source.col];
+                board[source.row, source.col] = new EmptyPiece();
+            }
             return true;
         }
         public override string ToString()

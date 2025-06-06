@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\daniele\\source\\repos\\ChessGame\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\draws\\fifthymoveruledraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\draws\\fifthymoveruledraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\pieces\\piece.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\pieces\\piece.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\pieces\\knight.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\pieces\\knight.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\draws\\fifthymoveruledraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\draws\\fifthymoveruledraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\draws\\deadpositiondraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -19,16 +31,8 @@
       "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\draws\\threefoldrepetitiondraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\pieces\\piece.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\pieces\\piece.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\pieces\\king.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\pieces\\king.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\pieces\\knight.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\pieces\\knight.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\draws\\stalematedraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -51,10 +55,6 @@
       "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\pieces\\queen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|c:\\users\\daniele\\source\\repos\\chessgame\\chessgame\\draws\\idraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DDF78669-4D8F-4318-86AB-D2AC8AAF48C8}|ChessGame\\ChessGame.csproj|solutionrelative:chessgame\\draws\\idraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -74,7 +74,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -82,33 +82,32 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Game.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Game.cs",
               "RelativeDocumentMoniker": "ChessGame\\Game.cs",
               "ToolTip": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Game.cs",
               "RelativeToolTip": "ChessGame\\Game.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAADsBAAAAAAAAAAAUwFIBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-23T13:14:55.113Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "Knight.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Pieces\\Knight.cs",
               "RelativeDocumentMoniker": "ChessGame\\Pieces\\Knight.cs",
               "ToolTip": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Pieces\\Knight.cs",
               "RelativeToolTip": "ChessGame\\Pieces\\Knight.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAvwBoAAABMAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAvwBoAAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-21T17:09:40.863Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-21T17:09:40.863Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "StalemateDraw.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Draws\\StalemateDraw.cs",
               "RelativeDocumentMoniker": "ChessGame\\Draws\\StalemateDraw.cs",
@@ -116,12 +115,11 @@
               "RelativeToolTip": "ChessGame\\Draws\\StalemateDraw.cs",
               "ViewState": "AgIAABMAAAAAAAAAAAAlwCEAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-25T14:22:23.272Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-25T14:22:23.272Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "Bishop.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Pieces\\Bishop.cs",
               "RelativeDocumentMoniker": "ChessGame\\Pieces\\Bishop.cs",
@@ -129,50 +127,47 @@
               "RelativeToolTip": "ChessGame\\Pieces\\Bishop.cs",
               "ViewState": "AgIAACoAAAAAAAAAAAAewA4AAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-21T17:08:44.144Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-21T17:08:44.144Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Piece.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Pieces\\Piece.cs",
               "RelativeDocumentMoniker": "ChessGame\\Pieces\\Piece.cs",
               "ToolTip": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Pieces\\Piece.cs",
               "RelativeToolTip": "ChessGame\\Pieces\\Piece.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAAwCkAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAmwCEAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-21T15:44:12.366Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-21T15:44:12.366Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Program.cs",
               "RelativeDocumentMoniker": "ChessGame\\Program.cs",
               "ToolTip": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Program.cs",
               "RelativeToolTip": "ChessGame\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-21T15:20:02.174Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "FifthyMoveRuleDraw.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Draws\\FifthyMoveRuleDraw.cs",
               "RelativeDocumentMoniker": "ChessGame\\Draws\\FifthyMoveRuleDraw.cs",
               "ToolTip": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Draws\\FifthyMoveRuleDraw.cs",
               "RelativeToolTip": "ChessGame\\Draws\\FifthyMoveRuleDraw.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-25T14:23:28.653Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-25T14:23:28.653Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "DeadPositionDraw.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Draws\\DeadPositionDraw.cs",
               "RelativeDocumentMoniker": "ChessGame\\Draws\\DeadPositionDraw.cs",
@@ -180,12 +175,11 @@
               "RelativeToolTip": "ChessGame\\Draws\\DeadPositionDraw.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAgwCUAAABdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-25T14:23:54.838Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-25T14:23:54.838Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "King.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Pieces\\King.cs",
               "RelativeDocumentMoniker": "ChessGame\\Pieces\\King.cs",
@@ -193,12 +187,11 @@
               "RelativeToolTip": "ChessGame\\Pieces\\King.cs",
               "ViewState": "AgIAADAAAAAAAAAAAAAlwD8AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-21T17:10:33.111Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-21T17:10:33.111Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "Queen.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Pieces\\Queen.cs",
               "RelativeDocumentMoniker": "ChessGame\\Pieces\\Queen.cs",
@@ -210,7 +203,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "PlayerRequestDraw.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Draws\\PlayerRequestDraw.cs",
               "RelativeDocumentMoniker": "ChessGame\\Draws\\PlayerRequestDraw.cs",
@@ -218,12 +211,11 @@
               "RelativeToolTip": "ChessGame\\Draws\\PlayerRequestDraw.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-25T14:21:43.839Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-25T14:21:43.839Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "ThreeFoldRepetitionDraw.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Draws\\ThreeFoldRepetitionDraw.cs",
               "RelativeDocumentMoniker": "ChessGame\\Draws\\ThreeFoldRepetitionDraw.cs",
@@ -231,8 +223,7 @@
               "RelativeToolTip": "ChessGame\\Draws\\ThreeFoldRepetitionDraw.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABLAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-25T14:23:07.209Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-25T14:23:07.209Z"
             },
             {
               "$type": "Document",
@@ -248,7 +239,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "Rook.cs",
               "DocumentMoniker": "C:\\Users\\daniele\\source\\repos\\ChessGame\\ChessGame\\Pieces\\Rook.cs",
               "RelativeDocumentMoniker": "ChessGame\\Pieces\\Rook.cs",

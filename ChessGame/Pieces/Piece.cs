@@ -3,36 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChessGame.Pieces;
 
 namespace ChessGame
 {
     public class Piece 
     {
        protected string Color;
-       protected int MoveNumber;
        
-
+       public Piece() { }
        public Piece(string _color) 
         {
             this.Color = _color;
-            MoveNumber = 0;
         }
 
 
-        public virtual bool Move(int currPieceRow, int currPieceColumn, int destRow, int destColumn, string player, Piece[,] board)
+        public virtual bool IsLegalMove(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
         {
             //some restrictions that common to all pieces
-
             //prevent moving with the opponent piece
-            if (board[currPieceRow, currPieceColumn].Color != player)
+            if (board[source.row, source.col].Color != player)
                 return false;
             //if its the same place
-            if (currPieceRow == destRow && currPieceColumn == destColumn)
+            if (source.Equals(destination))
                 return false;
             //if the place is occupied by the same player piece
-            if (board[destRow, destColumn] != null && board[destRow, destColumn].Color == player)
+            if (!(board[destination.row,destination.col] is EmptyPiece) && board[destination.row, destination.col].Color == player)
                 return false;
-
             return true;
         }
 
@@ -41,16 +38,7 @@ namespace ChessGame
             return Color;
         }
     
-        public bool setMoveNumber(int _moveNum)
-        {
-            if (_moveNum >= 0)
-            {
-                this.MoveNumber = _moveNum;
-                return true;
-            }
-            else return false;
-                
-        }
+      
 
         public bool setColor(string _color)
         {
@@ -60,10 +48,7 @@ namespace ChessGame
             return true;
         }
 
-        public int GetMoveNumber()
-        {
-            return MoveNumber;
-        }
+   
 
         public override string ToString()
         {

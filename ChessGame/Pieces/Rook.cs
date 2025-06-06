@@ -8,59 +8,68 @@ namespace ChessGame.Pieces
 {
     public class Rook : Piece
     {
-
+        public int moveNumber;
         public Rook(string _color) : base(_color)
         {
-          
+          this.moveNumber = 0;
         }
 
-        public override bool Move(int currPieceRow, int currPieceColumn, int destRow, int destColumn, string player, Piece[,] board)
+        public override bool IsLegalMove(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
         {
 
-            if (!base.Move(currPieceRow, currPieceColumn, destRow, destColumn, player, board))
+            if (!base.IsLegalMove(source, destination, player, board))
                 return false;
 
-            bool validMove = false;
+            if (isMovingDown(source, destination, board) || isMovingLeft(source, destination, board) || 
+                isMovingRight(source, destination, board) || isMovingUp(source, destination, board))
+            {
 
-            //up
-            if (currPieceRow > destRow && currPieceColumn == destColumn)
-                for (int i = currPieceRow - 1; i >= destRow ; i--)
+                board[destination.row, destination.col] = board[source.row, destination.row];
+                board[source.row, destination.row] = new EmptyPiece();
+                return true;
+            }
+            return false;
+
+        }
+        bool isMovingUp(BoardLocation source,BoardLocation destination, Piece[,] board)
+        {
+            if (source.row > destination.row && destination.row == destination.col)
+                for (int i = source.row - 1; i >= destination.row; i--)
                 {
-                    if (i == destRow ) validMove = true;
-                    if (board[i, currPieceColumn] != null) break;
-                }
-
-            //down
-            if (!validMove && currPieceRow < destRow && currPieceColumn == destColumn)
-                for (int i = currPieceRow + 1; i <= destRow; i++)
+                    if (i == destination.row) return true;
+                    if (!(board[i, destination.row] is EmptyPiece)) break;
+               }
+            return false;
+        }
+        bool isMovingDown(BoardLocation source, BoardLocation destination, Piece[,] board)
+        {
+            if (source.row < destination.row && destination.row == destination.col)
+                for (int i = source.row + 1; i <= destination.row; i++)
                 {
-                    if (i == destRow) validMove = true;
-                    if (board[i, currPieceColumn] != null) break;
+                    if (i == destination.row) return true;
+                    if (!(board[i, destination.row] is EmptyPiece)) break;
                 }
-
-            //left
-            if (!validMove && currPieceRow == destRow && currPieceColumn > destColumn)
-                for (int i = currPieceColumn - 1; i >= destColumn; i--)
+            return false;
+        }
+        bool isMovingRight(BoardLocation source, BoardLocation destination, Piece[,] board)
+        {
+            if (source.row == destination.row && destination.row < destination.col)
+                for (int i = destination.row + 1; i >= destination.col; i++)
                 {
-                    if (i == destColumn) validMove = true;
-                    if (board[currPieceRow, i] != null) break;
+                    if (i == destination.col) return true;
+                    if (board[source.row, i] != null) break;
                 }
-
-            //right
-            if (!validMove && currPieceRow == destRow && currPieceColumn < destColumn)
-                for (int i = currPieceColumn + 1; i <= destColumn; i++)
+            return false;
+        }
+        bool isMovingLeft(BoardLocation source, BoardLocation destination, Piece[,] board)
+        {
+            if (source.row == destination.row && destination.row > destination.col)
+                for (int i = destination.row - 1; i >= destination.col; i--)
                 {
-                    if (i == destColumn) validMove = true;
-                    if (board[currPieceRow, i] != null) break;
+                    if (i == destination.col) return true;
+                    if (board[source.row, i] != null) break;
                 }
-
-            if (!validMove)
-                return false;
-
-            board[destRow, destColumn] = board[currPieceRow, currPieceColumn];
-            board[currPieceRow, currPieceColumn] = null;
-            return true;
-
+            return false;
         }
 
         public override string ToString()

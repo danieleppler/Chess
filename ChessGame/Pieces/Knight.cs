@@ -12,52 +12,66 @@ namespace ChessGame.Pieces
         {
         }
 
-        public override bool Move(int currPieceRow, int currPieceColumn, int destRow, int destColumn, string player, Piece[,] board)
+        public override bool IsLegalMove(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
         {
-            if (!base.Move(currPieceRow, currPieceColumn, destRow, destColumn, player, board))
+            if (!base.IsLegalMove(source, destination, player, board))
                 return false;
+            if(IsMovingUpperRightStraightL(source,destination) ||
+                IsMovingUpperLeftStraightL(source,destination) ||
+                IsMovingUpperRightLayingL(source,destination) ||
+                IsMovingUpperLeftLayingL(source,destination)||
+                IsMovingDownLeftLayingL(source,destination)||
+                IsMovingDownRightLayingL(source,destination)||
+                IsMovingDownLeftStraightL(source,destination) ||
+                IsMovingDownRightStraightL(source, destination))
+            {
+                board[destination.row, destination.col] = board[source.row, source.col];
+                board[source.row, source.col] = new EmptyPiece();
+                return true;
+            }
+                return false;                 
+        }
 
-            bool validMove = false;
+        bool IsMovingUpperRightStraightL(BoardLocation source,BoardLocation destination)
+        {
+            if (destination.row == source.row - 2 && destination.col == source.col + 1) return true;
+            return false;
+        }
 
-            //upper right "straight L"
-            if (destRow == currPieceRow - 2 && destColumn == currPieceColumn + 1)
-                validMove = true;
-
-            //upper left "straight L"
-            if (destRow == currPieceRow - 2 && destColumn == currPieceColumn - 1)
-                validMove = true;
-
-            //upper right "laying L"
-            if (destRow == currPieceRow -1 && destColumn == currPieceColumn + 2)
-                validMove = true;
-
-            //upper left "laying L"
-            if (destRow == currPieceRow - 1 && destColumn == currPieceColumn - 2)
-                validMove = true;
-
-            //beneath right "straight L"
-            if (destRow == currPieceRow + 2 && destColumn == currPieceColumn + 1)
-                validMove = true;
-
-            //beneath left "straight L"
-            if (destRow == currPieceRow + 2 && destColumn == currPieceColumn - 1)
-                validMove = true;
-
-            //beneath right "laying L"
-            if (destRow == currPieceRow + 1 && destColumn == currPieceColumn + 2)
-                validMove = true;
-
-            //beneath left "laying L"
-            if (destRow == currPieceRow + 1 && destColumn == currPieceColumn - 2)
-                validMove = true;
-
-            if (!validMove)
-                return false;
-
-
-            board[destRow, destColumn] = board[currPieceRow, currPieceColumn];
-            board[currPieceRow, currPieceColumn] = null;
-            return true;
+        bool IsMovingUpperLeftStraightL(BoardLocation source, BoardLocation destination)
+        {
+            if (destination.row == source.row - 2 && destination.col == source.col - 1) return true;
+            return false;
+        }
+        bool IsMovingUpperRightLayingL(BoardLocation source, BoardLocation destination)
+        {
+            if (destination.row == source.row - 1 && destination.col == source.col + 2) return true;
+            return false;
+        }
+        bool IsMovingUpperLeftLayingL(BoardLocation source, BoardLocation destination)
+        {
+            if (destination.row == source.row - 1 && destination.col == source.col - 2) return true;
+            return false;
+        }
+        bool IsMovingDownRightStraightL(BoardLocation source, BoardLocation destination)
+        {
+            if (destination.row == source.row + 2 && destination.col == source.col + 1) return true;
+            return false;
+        }
+        bool IsMovingDownLeftStraightL(BoardLocation source, BoardLocation destination)
+        {
+            if (destination.row == source.row + 2 && destination.col == source.col - 1) return true;
+            return false;
+        }
+        bool IsMovingDownRightLayingL(BoardLocation source, BoardLocation destination)
+        {
+            if (destination.row == source.row + 1 && destination.col == source.col + 2) return true;
+            return false;
+        }
+        bool IsMovingDownLeftLayingL(BoardLocation source, BoardLocation destination)
+        {
+            if (destination.row == source.row + 1 && destination.col == source.col - 2) return true;
+            return false;
         }
 
         public override string ToString()
