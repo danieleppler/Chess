@@ -20,8 +20,6 @@ namespace ChessGame.Pieces
             if (IsMovingDownRight(source, destination, board) || IsMovingDownLeft(source, destination, board) || IsMovingUpLeft(source, destination, board)
                 || IsMovingUpRight(source, destination, board))
             {
-                board[destination.row, destination.col] = board[source.row, source.col];
-                board[source.row, source.col] = new EmptyPiece();
                 return true;
             }
             return false;
@@ -55,7 +53,7 @@ namespace ChessGame.Pieces
                 for (int i = source.row - 1, j = source.col + 1; i >= destination.row && j <= destination.col; i--, j++)
                 {
                     if (i == destination.row && j == destination.col) return true;
-                    if (board[i, j] != null) break;
+                    if (!(board[i, j] is EmptyPiece)) break;
                 }
             return false;
         }
@@ -66,7 +64,7 @@ namespace ChessGame.Pieces
                 for (int i = source.row - 1, j = source.col - 1; i >= destination.row && j >= destination.col; i--, j--)
                 {
                     if (i == destination.row && j == destination.col) return true;
-                    if (board[i, j] != null) break;
+                    if (!(board[i, j] is EmptyPiece)) break;
                 }
             return false ;
         }

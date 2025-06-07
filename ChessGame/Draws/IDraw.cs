@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
-namespace ChessGame.Draws
-{
-    public interface IDraw
-    {
-        bool IsDraw(Piece[,] board,Game currGame,string playerTurn);
-    }
-}
+//namespace ChessGame.Draws
+//{
+//    public interface IDraw
+//    {
+//        bool IsDraw(Piece[,] board,Game currGame,string playerTurn);
+//    }
+//}

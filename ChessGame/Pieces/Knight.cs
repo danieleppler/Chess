@@ -25,8 +25,6 @@ namespace ChessGame.Pieces
                 IsMovingDownLeftStraightL(source,destination) ||
                 IsMovingDownRightStraightL(source, destination))
             {
-                board[destination.row, destination.col] = board[source.row, source.col];
-                board[source.row, source.col] = new EmptyPiece();
                 return true;
             }
                 return false;                 

@@ -9,7 +9,7 @@ namespace ChessGame.Pieces
 {
     public class King : Piece
     {
-        int moveNumber;
+        public int moveNumber;
         public King(string _color) : base(_color)
         {
             moveNumber = 0;
@@ -38,9 +38,6 @@ namespace ChessGame.Pieces
                 validMove = true;
             if (validMove)
             {
-                board[destination.row, destination.col] = board[source.row, source.col];
-                board[source.row, source.col] = new EmptyPiece();
-                this.moveNumber++;
                 return true;
             }
             if (isMovingIsCastling(source, destination, player, board))
@@ -48,20 +45,19 @@ namespace ChessGame.Pieces
             else return false;         
         }
 
-        bool isMovingIsCastling(BoardLocation source,BoardLocation destination,string player, Piece[,] board)
+
+        public bool isMovingIsCastling(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
         {
             int CastlingRow = player == "white" ? 7 : 0;
             int CastlingDireciton = (destination.col == source.col + 2) ? 1 : -1; //-1 for left 1 for right
             if (this.moveNumber == 0 && CastlingDireciton != 0 && source.row == destination.row)
             {
-                if ((board[CastlingRow, 0] is Rook && ((Rook)board[CastlingRow, 0]).GetMoveNumber() == 0) || (board[CastlingRow, 7] is Rook && ((Rook)board[CastlingRow, 7]).GetMoveNumber() == 0))
+                if ((board[CastlingRow, 0] is Rook && ((Rook)board[CastlingRow, 0]).moveNumber == 0) || (board[CastlingRow, 7] is Rook && ((Rook)board[CastlingRow, 7]).moveNumber == 0))
                 {
-                        if (board[CastlingRow, source.col + CastlingDireciton] is EmptyPiece & board[CastlingRow, source.col + (2 * CastlingDireciton)] is EmptyPiece)
-                        {
-                        board[CastlingRow, source.col] = board[CastlingRow, source.col + (2*CastlingDireciton)];
-                        board[CastlingRow, source.col] = new EmptyPiece();
+                    if (board[CastlingRow, source.col + CastlingDireciton] is EmptyPiece & board[CastlingRow, source.col + (2 * CastlingDireciton)] is EmptyPiece)
+                    {
                         return true;
-                        }
+                    }
                 }
             }
             return false;

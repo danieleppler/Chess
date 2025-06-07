@@ -23,9 +23,6 @@ namespace ChessGame.Pieces
             if (isMovingDown(source, destination, board) || isMovingLeft(source, destination, board) || 
                 isMovingRight(source, destination, board) || isMovingUp(source, destination, board))
             {
-
-                board[destination.row, destination.col] = board[source.row, destination.row];
-                board[source.row, destination.row] = new EmptyPiece();
                 return true;
             }
             return false;
@@ -33,41 +30,41 @@ namespace ChessGame.Pieces
         }
         bool isMovingUp(BoardLocation source,BoardLocation destination, Piece[,] board)
         {
-            if (source.row > destination.row && destination.row == destination.col)
+            if (source.row > destination.row && source.col == destination.col)
                 for (int i = source.row - 1; i >= destination.row; i--)
                 {
                     if (i == destination.row) return true;
-                    if (!(board[i, destination.row] is EmptyPiece)) break;
+                    if (!(board[i, destination.col] is EmptyPiece)) break;
                }
             return false;
         }
         bool isMovingDown(BoardLocation source, BoardLocation destination, Piece[,] board)
         {
-            if (source.row < destination.row && destination.row == destination.col)
+            if (source.row < destination.row && source.col == destination.col)
                 for (int i = source.row + 1; i <= destination.row; i++)
                 {
                     if (i == destination.row) return true;
-                    if (!(board[i, destination.row] is EmptyPiece)) break;
+                    if (!(board[i, destination.col] is EmptyPiece)) break;
                 }
             return false;
         }
         bool isMovingRight(BoardLocation source, BoardLocation destination, Piece[,] board)
         {
-            if (source.row == destination.row && destination.row < destination.col)
-                for (int i = destination.row + 1; i >= destination.col; i++)
+            if (source.row == destination.row && source.col < destination.col)
+                for (int i = source.col + 1; i <= destination.col; i++)
                 {
                     if (i == destination.col) return true;
-                    if (board[source.row, i] != null) break;
+                    if (!(board[source.row, i] is EmptyPiece)) break;
                 }
             return false;
         }
         bool isMovingLeft(BoardLocation source, BoardLocation destination, Piece[,] board)
         {
-            if (source.row == destination.row && destination.row > destination.col)
-                for (int i = destination.row - 1; i >= destination.col; i--)
+            if (source.row == destination.row && source.col > destination.col)
+                for (int i = source.col - 1; i >= destination.col; i--)
                 {
                     if (i == destination.col) return true;
-                    if (board[source.row, i] != null) break;
+                    if (!(board[source.row, i] is EmptyPiece)) break;
                 }
             return false;
         }

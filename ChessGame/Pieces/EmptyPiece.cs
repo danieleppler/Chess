@@ -12,9 +12,14 @@ namespace ChessGame.Pieces
         {
         }
 
-        public override bool Move(int currPieceRow, int currPieceColumn, int destRow, int destColumn, string player, Piece[,] board)
+        public override bool IsLegalMove(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
         {
             return false;
+        }
+
+        public override string ToString()
+        {
+            return "- ";
         }
     }
 }

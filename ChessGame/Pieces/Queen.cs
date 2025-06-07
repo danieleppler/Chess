@@ -21,10 +21,9 @@ namespace ChessGame.Pieces
            Bishop queenAsABishop = new Bishop(player);
            if(queenAsARook.IsLegalMove(source,destination,player,board) || queenAsABishop.IsLegalMove(source, destination, player, board))
             {
-                board[destination.row, destination.col] = board[source.row, source.col];
-                board[source.row, source.col] = new EmptyPiece();
+                return true;
             }
-            return true;
+            return false;
         }
         public override string ToString()
         {
