@@ -11,12 +11,10 @@ namespace ChessGame.Pieces
         public Bishop(string _color) : base(_color)
         {
         }
-
         public override bool IsLegalMove(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
         {
             if (!base.IsLegalMove(source,destination, player, board))
-                return false;
-           
+                return false;  
             if (IsMovingDownRight(source, destination, board) || IsMovingDownLeft(source, destination, board) || IsMovingUpLeft(source, destination, board)
                 || IsMovingUpRight(source, destination, board))
             {

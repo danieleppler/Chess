@@ -23,30 +23,20 @@ namespace ChessGame.Pieces
         }
 
  
-        bool IsEnPassant(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
+        public bool IsEnPassant(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
         {
             int direction;
             if (player == "white")
                 direction = -1;
             else direction = 1;
-            if (destination.col == source.col + 1)
-            {
-                if (board[source.row, source.col + 1] is Pawn && ((Pawn)board[source.row, source.col + 1]).moveNumber == 1 && board[source.row + (1 * direction), destination.col] == null)
-                {
-                    board[source.row, source.col + 1] = new EmptyPiece();
+            if (destination.col == source.col + 1 && destination.row == source.row + direction)
+                if (board[source.row, source.col + 1] is Pawn && ((Pawn)board[source.row, source.col + 1]).moveNumber == 1 && 
+                    board[source.row + (1 * direction), destination.col] is EmptyPiece)
+                    return true;     
+            if (destination.col== source.col - 1 && destination.row == source.row + direction)
+                if (board[source.row, source.col - 1] is Pawn && ((Pawn)board[source.row, source.col - 1]).moveNumber == 1 && 
+                    board[source.row + (1 * direction), destination.col] is EmptyPiece)
                     return true;
-                }
-            }
-
-            if (destination.col == source.col - 1)
-            {
-                if (board[source.row, source.col - 1] is Pawn && ((Pawn)board[source.row, source.col - 1]).moveNumber == 1 && board[source.row + (1 * direction), destination.col] == null)
-                {
-                    board[source.row, source.col - 1] = new EmptyPiece();
-                    return true;
-                }
-            }
-
             return false;
         }
         bool IsCapturing(BoardLocation source,BoardLocation destination ,string player, Piece[,] board)

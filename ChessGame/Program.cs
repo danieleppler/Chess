@@ -7,6 +7,5 @@ namespace ChessGame
         {
             new Game().startAndPlayGame();
         }
-
     }
 }

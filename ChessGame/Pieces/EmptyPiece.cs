@@ -11,12 +11,10 @@ namespace ChessGame.Pieces
        public EmptyPiece() : base()
         {
         }
-
         public override bool IsLegalMove(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
         {
             return false;
         }
-
         public override string ToString()
         {
             return "- ";
