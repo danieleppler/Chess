@@ -49,7 +49,7 @@ namespace ChessGame.Pieces
         public bool isMovingIsCastling(BoardLocation source, BoardLocation destination, string player, Piece[,] board)
         {
             int CastlingRow = player == "white" ? 7 : 0;
-            int CastlingDireciton = (destination.col == source.col + 2) ? 1 : -1; //-1 for left 1 for right
+            int CastlingDireciton = (destination.col == source.col + 2) ? 1 : (destination.col == source.col - 2?-1:0); //-1 for left 1 for right
             if (this.moveNumber == 0 && CastlingDireciton != 0 && source.row == destination.row)
             {
                 if ((board[CastlingRow, 0] is Rook && ((Rook)board[CastlingRow, 0]).moveNumber == 0) || (board[CastlingRow, 7] is Rook && ((Rook)board[CastlingRow, 7]).moveNumber == 0))
